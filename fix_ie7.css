@@ -1,0 +1,26 @@
+/*
+screen/fix_ie7.css
+*/
+
+
+/* ________________________ General hasLayout fix ________________________ */
+
+.bookNav,
+#logo,
+#nav {
+  zoom: 1;
+}
+
+
+/* _______________________ General Positioning Fix _______________________ */
+
+.code {
+  position: relative;
+}
+
+
+/* _____________________________ General Fixes ___________________________ */
+
+.navHorz li a {
+  position: relative;
+}

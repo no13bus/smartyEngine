@@ -1,0 +1,1465 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Smarty3 æ‰‹å†Œ | Smarty</title>
+    <meta name="description" content="Smarty3 æ‰‹å†Œ">
+    <meta name="keywords" content="smarty3, ">
+    <style type="text/css" media="screen">
+    @import "global.css"/*tpa=http://www.smarty.net/css/screen/global.css*/;
+    @import "typography.css"/*tpa=http://www.smarty.net/css/typography.css*/;
+    </style>
+    
+    <!--[if lt IE 7]>
+    <style type="text/css" media="screen">
+    @import "fix_ie.css"/*tpa=http://www.smarty.net/css/screen/fix_ie.css*/;
+    </style>
+    <![endif]-->
+    
+    <!--[if IE 7]>
+    <style type="text/css" media="screen">
+    @import "fix_ie7.css"/*tpa=http://www.smarty.net/css/screen/fix_ie7.css*/;
+    </style>
+    <![endif]-->
+    
+    <link rel="stylesheet" type="text/css" media="print" href="typography.css" tppabs="http://www.smarty.net/css/typography.css">
+    <link rel="stylesheet" type="text/css" media="print" href="global-1.css" tppabs="http://www.smarty.net/css/print/global.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="bbedit.css" tppabs="http://www.smarty.net/js/bbedit.css">
+    
+    <script type="text/javascript" src="jsapi-key=ABQIAAAAtNLTcaiYcFN-f4XrzpVY_RSkE6bExsEa6fcoWABjZpep9Iy-rxQHKn32rDn2QOaRGdO78OCTegXQvw" tppabs="http://www.google.com/jsapi?key=ABQIAAAAtNLTcaiYcFN-f4XrzpVY_RSkE6bExsEa6fcoWABjZpep9Iy-rxQHKn32rDn2QOaRGdO78OCTegXQvw"></script>
+    <script type="text/javascript" src="jquery.min.js" tppabs="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script type="text/javascript" src="jquery-ui.min.js" tppabs="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.4/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="jquery.bbedit.min.js" tppabs="http://www.smarty.net/js/jquery.bbedit.min.js"></script>
+
+    <link href="prettify.css" tppabs="http://www.smarty.net/js/prettify/prettify.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="prettify.js" tppabs="http://www.smarty.net/js/prettify/prettify.js"></script>    
+    
+    <script type="text/JavaScript"> 
+     $(document).ready(function(){
+       prettyPrint();
+              $("#commentFormBodyText").bbedit({
+           highlight: true,
+           enableSmileybar: false,
+           tags: 'b,i,url,code,quote'
+       });
+       $("#commentPreviewText").hide();
+       $("#commentPostedText").hide();
+       $("#commentBusyIcon").hide();
+       $("#commentForm").submit(function() { return false; });
+       $("#commentFormPreviewButton").click(function(){
+         $("#commentBusyIcon").show();
+         $.post("/comments/preview", { body: $("#commentFormBodyText").val(), author: $("#commentFormAuthorText").val() },
+            function(data){
+              var options = {};
+              if($("#commentPreviewText").is(":visible")) {
+                $("#commentPreviewText").hide('blind',options,500,function() {
+                  $("#commentPreviewText").html(data);
+                  $("#commentPreviewText").show('blind',options,500,function() {
+                    $("#commentBusyIcon").hide();
+                  });                  
+                });
+              } else {
+                $("#commentPreviewText").html(data);
+                $("#commentPreviewText").show('blind',options,500,function() {
+                  $("#commentBusyIcon").hide();
+                });                  
+              }
+            });
+       }); 
+       $("#commentFormPostButton").click(function(){
+         $("#commentBusyIcon").show();
+         $.post("/comments/post", { body: $("#commentFormBodyText").val(), author: $("#commentFormAuthorText").val(), page_id: $("#commentFormPageID").val(), email: $("#commentFormEmailText").val(), challenge: $("#commentFormChallengeText").val(), obf: $("#commentFormChallengeObf").val()},
+            function(data){
+              var options = {};
+              $("#commentPostedText").html(data);
+              if($("#commentPreviewText").is(":visible")) {
+                $("#commentPreviewText").hide('blind',options,500,function() {
+                  $("#commentPostedText").show('blind',options,500,function() {
+                    $("#commentBusyIcon").hide();
+                    $("#commentFormPostButton").attr('disabled','true'); 
+                    $("#commentFormPreviewButton").attr('disabled','true'); 
+                  });
+                });
+              } else {
+                $("#commentPostedText").show('blind',options,500,function() {
+                  $("#commentBusyIcon").hide();
+                  $("#commentFormPostButton").attr('disabled','true'); 
+                  $("#commentFormPreviewButton").attr('disabled','true'); 
+                });
+              }                  
+            });
+       });
+            });
+          function clearDefaultandCSS(el) {
+     	if (el.defaultValue==el.value) el.value = ""
+     	// If Dynamic Style is supported, clear the style
+     	if (el.style) el.style.cssText = ""
+     }
+         </script>
+    
+    <script type="text/javascript" src="smarty.js" tppabs="http://www.smarty.net/js/smarty.js"></script>
+  	<script type="text/javascript" src="google_service.js" tppabs="http://partner.googleadservices.com/gampad/google_service.js"> 
+  	</script> 
+  	<script type="text/javascript"> 
+  	  GS_googleAddAdSenseService("ca-pub-8878956630941543");
+  	  GS_googleEnableAllServices();
+  	</script> 
+  	<script type="text/javascript"> 
+  	  GA_googleAddSlot("ca-pub-8878956630941543", "smarty_footer");
+  	  GA_googleAddSlot("ca-pub-8878956630941543", "smarty_left_box");
+  	  GA_googleAddSlot("ca-pub-8878956630941543", "smarty_right_skyscraper");
+  	  GA_googleAddSlot("ca-pub-8878956630941543", "smarty_top_banner");
+  	</script> 
+  	<script type="text/javascript"> 
+  	  GA_googleFetchAds();
+  	</script>
+  </head>
+  <body>
+  <a class="skiplink" accesskey="S" href="#mainContent">Skip over navigation</a>
+  <div id="wrapper">
+      <div id="header">
+        <div id="header_logo">
+          <div id="logo"><a href="javascript:if(confirm('http://www.smarty.net/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/'" tppabs="http://www.smarty.net/"><img src="logo_print.gif" tppabs="http://www.smarty.net/images/logo_print.gif" width="249" height="74" alt="Smarty Template Engine"></a></div>
+        </div>
+        <div id="header_ad" style="float: right;">
+      		<script type="text/javascript"> 
+      		  GA_googleFillSlot("smarty_footer");
+      		</script>
+      	</div>
+        <div class="clear"></div>
+      </div>
+      <div id="nav">
+        <ul class="nav navHorz">
+		  		  		  		  		  		              		<li><a href="javascript:if(confirm('http://www.smarty.net/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/'" tppabs="http://www.smarty.net/" accesskey="1">Home</a></li>
+					  		              		<li><a href="javascript:if(confirm('http://www.smarty.net/download  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/download'" tppabs="http://www.smarty.net/download" >Download</a></li>
+					  		              		<li><a href="javascript:if(confirm('http://www.smarty.net/documentation  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/documentation'" tppabs="http://www.smarty.net/documentation" accesskey="6">Documentation</a></li>
+					  		              		<li><a href="javascript:if(confirm('http://smarty.incutio.com/?page=SmartyFrequentlyAskedQuestions  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://smarty.incutio.com/?page=SmartyFrequentlyAskedQuestions'" tppabs="http://smarty.incutio.com/?page=SmartyFrequentlyAskedQuestions" >FAQ</a></li>
+					  		              		<li><a href="javascript:if(confirm('http://www.smarty.net/forums/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/forums/'" tppabs="http://www.smarty.net/forums/" >Forum</a></li>
+					  		              		<li><a href="javascript:if(confirm('http://www.smarty.net/mailinglists  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/mailinglists'" tppabs="http://www.smarty.net/mailinglists" >Mailing Lists</a></li>
+					          </ul>
+        
+        <form action="http://www.smarty.net/search" method="get">
+          <p>
+            <input type="text" name="q" size="30" value="Search..." accesskey="4" class="field" onclick="smarty.removeDefaultValue(this, 'Search...');" onfocus="smarty.removeDefaultValue(this, 'Search...');" onblur="smarty.restoreDefaultValue(this, 'Search...');">
+            in
+            <select name="show" class="field">
+              <optgroup label="Documentation">
+                <option value="manual-en">English</option>
+                <option value="manual-de">German</option>
+                <option value="manual-es">Spanish</option>
+                <option value="manual-fr">French</option>
+                <option value="manual-it">Italian</option>
+                <option value="manual-ja">Japanese</option>
+                <option value="manual-pt_BR">Portuguese</option>
+                <option value="manual-ru">Russian</option>
+              </optgroup>
+              <optgroup label="Mailing Lists">
+                <option value="smarty-general-list">General</option>
+                <option value="smarty-dev-list">Development</option>
+              </optgroup>
+            </select>
+            <input type="image" src="search.png" tppabs="http://www.smarty.net/images/search.png" alt="Submit Search" class="button">
+          </p>
+        </form>
+        <div class="clear"></div>
+      </div>
+     
+      <div class="col colSecondary">
+        <div class="box box1">
+          <h1 class="boxHead">Get Smarty</h1>
+          <ul class="nav navVert"
+            ><li><a href="javascript:if(confirm('http://www.smarty.net/download  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/download'" tppabs="http://www.smarty.net/download">Download</a></li
+          ></ul>
+        </div>
+        
+        <div class="box box1">
+          <h1 class="boxHead">About Smarty</h1>
+          <ul class="nav navVert"
+          ><li><a href="javascript:if(confirm('http://www.smarty.net/about_smarty  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/about_smarty'" tppabs="http://www.smarty.net/about_smarty">All About Smarty</a></li
+            ><li><a href="javascript:if(confirm('http://www.smarty.net/why_use  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/why_use'" tppabs="http://www.smarty.net/why_use">Why use it?</a></li
+              ><li><a href="javascript:if(confirm('http://www.smarty.net/use_cases  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/use_cases'" tppabs="http://www.smarty.net/use_cases">Use Cases and Work Flow</a></li
+            ><li><a href="javascript:if(confirm('http://www.smarty.net/syntax_comparison  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/syntax_comparison'" tppabs="http://www.smarty.net/syntax_comparison">Syntax Comparison</a></li
+            ><li><a href="javascript:if(confirm('http://www.smarty.net/inheritance  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/inheritance'" tppabs="http://www.smarty.net/inheritance">Template Inheritance</a></li
+            ><li><a href="javascript:if(confirm('http://www.smarty.net/best_practices  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/best_practices'" tppabs="http://www.smarty.net/best_practices">Best Practices</a></li
+            ><li><a href="javascript:if(confirm('http://www.smarty.net/crash_course  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/crash_course'" tppabs="http://www.smarty.net/crash_course">Crash Course</a></li
+            ><li><a href="javascript:if(confirm('http://www.smarty.net/v3_overview  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/v3_overview'" tppabs="http://www.smarty.net/v3_overview">Version 3 Overview</a></li
+            ><li><a href="javascript:if(confirm('http://www.smarty.net/forums/viewforum.php?f=12  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/forums/viewforum.php?f=12'" tppabs="http://www.smarty.net/forums/viewforum.php?f=12">Testimonials</a></li
+              ><li><a href="javascript:if(confirm('http://smarty.incutio.com/?page=SitesUsingSmarty  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://smarty.incutio.com/?page=SitesUsingSmarty'" tppabs="http://smarty.incutio.com/?page=SitesUsingSmarty">Sites Using Smarty</a></li
+          ></ul>
+        </div>
+        
+        <div class="box box1">
+          <h1 class="boxHead">Resources</h1>
+          <ul class="nav navVert"
+          ><li><a href="javascript:if(confirm('http://smarty-php.googlecode.com/svn/trunk/distribution/SMARTY_2_BC_NOTES.txt  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://smarty-php.googlecode.com/svn/trunk/distribution/SMARTY_2_BC_NOTES.txt'" tppabs="http://smarty-php.googlecode.com/svn/trunk/distribution/SMARTY_2_BC_NOTES.txt">Smarty 2-&gt;3 upgrade notes</a></li
+            ><li><a href="javascript:if(confirm('http://smarty-php.googlecode.com/svn/trunk/distribution/README  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://smarty-php.googlecode.com/svn/trunk/distribution/README'" tppabs="http://smarty-php.googlecode.com/svn/trunk/distribution/README">README (from distro)</a></li
+          ><li><a href="javascript:if(confirm('http://www.smarty.net/quick_install  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/quick_install'" tppabs="http://www.smarty.net/quick_install">Quick Install</a></li
+	      ><li><a href="javascript:if(confirm('http://www.smarty.net/documentation  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/documentation'" tppabs="http://www.smarty.net/documentation">Documentation</a></li
+		  ><li><a href="javascript:if(confirm('http://www.smarty.net/forums/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/forums/'" tppabs="http://www.smarty.net/forums/">Discussion Forums</a></li
+	      ><li><a href="javascript:if(confirm('http://www.smarty.net/sampleapp1  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/sampleapp1'" tppabs="http://www.smarty.net/sampleapp1">Example App</a></li
+          ><li><a href="irc://irc.freenode.net/smarty">IRC (chat)</a></li
+          ><li><a href="javascript:if(confirm('http://www.smarty.net/mailinglists  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/mailinglists'" tppabs="http://www.smarty.net/mailinglists">Mailing Lists</a></li
+          ><li><a href="javascript:if(confirm('http://smarty.incutio.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://smarty.incutio.com/'" tppabs="http://smarty.incutio.com/">Community Wiki</a></li
+          ><li><a href="javascript:if(confirm('http://smarty.incutio.com/?page=SmartyFrequentlyAskedQuestions  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://smarty.incutio.com/?page=SmartyFrequentlyAskedQuestions'" tppabs="http://smarty.incutio.com/?page=SmartyFrequentlyAskedQuestions">FAQ (wiki)</a></li
+          ><li><a href="javascript:if(confirm('http://www.smarty.net/forums/viewforum.php?f=23  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/forums/viewforum.php?f=23'" tppabs="http://www.smarty.net/forums/viewforum.php?f=23" accesskey="5">FAQ (forums)</a></li
+          ><li><a href="javascript:if(confirm('http://www.jdoqocy.com/click-4355642-10718312?url=http%3A%2F%2Fwww.odesk.com%2Fcontractors%2Fskill%2Fsmarty%2Ffb%2F4.5-5.0-stars.4.0-4.5-stars%2Fsort%2Fadjusted-score%2Bdesc?vt_cmp=smarty  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.jdoqocy.com/click-4355642-10718312?url=http%3A%2F%2Fwww.odesk.com%2Fcontractors%2Fskill%2Fsmarty%2Ffb%2F4.5-5.0-stars.4.0-4.5-stars%2Fsort%2Fadjusted-score%2Bdesc?vt_cmp=smarty'" tppabs="http://www.jdoqocy.com/click-4355642-10718312?url=http%3A%2F%2Fwww.odesk.com%2Fcontractors%2Fskill%2Fsmarty%2Ffb%2F4.5-5.0-stars.4.0-4.5-stars%2Fsort%2Fadjusted-score%2Bdesc?vt_cmp=smarty">Hire Smarty Developers</a></li
+          ></ul>
+        </div>
+        <div class="box box1">
+          <h1 class="boxHead">Links</h1>
+          <ul class="nav navVert"
+          ><li><a href="javascript:if(confirm('http://www.php.net/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.php.net/'" tppabs="http://www.php.net/">www.php.net</a></li
+            ><li><a href="javascript:if(confirm('http://www.phpinsider.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.phpinsider.com/'" tppabs="http://www.phpinsider.com/">www.phpinsider.com</a></li
+            ><li><a href="javascript:if(confirm('http://www.ellysdirectory.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.ellysdirectory.com/'" tppabs="http://www.ellysdirectory.com/">www.ellysdirectory.com</a></li
+              
+              
+          ></ul>
+        </div>
+        <div class="box box1" id="bitcoin">
+          <h1 class="boxHead">Donate</h1>
+          <div align="center" class="boxContent">
+            <div>
+            <a href="javascript:void(0);" onclick="javascript:window.prompt ('Copy and paste address to your bitcoin software:', '19fEr3YYkGoHrT2zu4e2GBasdrJu6wwAze');"><img src="bitcoin.png" tppabs="http://www.smarty.net/images/bitcoin.png" width="25" height="25" alt="Donate Bitcoin" style="vertical-align:middle"> Bitcoin</a>
+            </div>
+            <div>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+            <input type="hidden" name="cmd" value="_s-xclick">
+            <input type="hidden" name="hosted_button_id" value="AK2ZWFVSNJEDE">
+            <input type="image" src="btn_donate_SM.gif-01AD=3ShGsLYwLYk2B23aJP5yjtPIKVLR736y30o1fBmf3GS8luvu9uz_6bA&01RI=C58748E4B9AF6D0&01NA=na.gif" tppabs="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal Donate" style="vertical-align:middle"> Paypal
+            <img alt="" border="0" src="pixel.gif" tppabs="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+            </form>
+            </div>
+          </div>
+        </div>
+        <div class="box box1" id="smartyIcons">
+          <h1 class="boxHead">Smarty Icon</h1>
+          <div align="center" class="boxContent">
+            <p style="text-align: left">You may use the Smarty logo according to the <a href="javascript:if(confirm('http://www.smarty.net/copyright  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/copyright'" tppabs="http://www.smarty.net/copyright">trademark notice</a>.</p>
+            <p>
+              <img src="smarty_icon.gif" tppabs="http://www.smarty.net/images/icons/smarty_icon.gif" width="88" height="31" alt="Smarty Template Engine">
+              <img src="smarty-80x15.png" tppabs="http://www.smarty.net/images/icons/smarty-80x15.png" width="80" height="15" alt="Smarty Template Engine">
+            </p>
+            <p style="text-align: left">
+              For sponsorship, advertising, news or other inquiries, contact us at: <script type="text/javascript" language="javascript">
+{document.write(String.fromCharCode(60,97,32,104,114,101,102,61,34,109,97,105,108,116,111,58,119,101,98,109,97,115,116,101,114,64,115,109,97,114,116,121,46,110,101,116,34,32,62,119,101,98,109,97,115,116,101,114,64,115,109,97,114,116,121,46,110,101,116,60,47,97,62))}
+</script>
+
+            </p>
+          </div>
+        </div>        
+        <div class="box box1" id="sitesUsingSmarty">
+          <h1 class="boxHead">Sites Using Smarty</h1>
+          <div align="center" class="boxContent">
+			   <p>Buy <a href="javascript:if(confirm('http://www.cheapglasses123.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.cheapglasses123.com/'" tppabs="http://www.cheapglasses123.com/">cheap eyeglasses</a> from <a href="javascript:if(confirm('http://www.cheapglasses123.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.cheapglasses123.com/'" tppabs="http://www.cheapglasses123.com/">Cheapglasses123.com</a> and save up to 80%.</p>
+      			<p>
+      			  Buy <a href="javascript:if(confirm('http://www.australiaglasses.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.australiaglasses.com/'" tppabs="http://www.australiaglasses.com/">prescription glasses</a> from <a href="javascript:if(confirm('http://www.australiaglasses.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.australiaglasses.com/'" tppabs="http://www.australiaglasses.com/">www.australiaglasses.com</a> and save.
+				</p>
+				<p>
+  					<a href="javascript:if(confirm('http://www.glassespeople.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.glassespeople.com/'" tppabs="http://www.glassespeople.com/">Cheap Glasses</a> Now On Sale at <a href="javascript:if(confirm('http://www.glassespeople.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.glassespeople.com/'" tppabs="http://www.glassespeople.com/">GlassesPeople.com</a>. Starts At $7.95.
+      			</p>
+      			<p>
+      			Where to buy <a href="javascript:if(confirm('http://www.weddingdresstrend.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.weddingdresstrend.com/'" tppabs="http://www.weddingdresstrend.com/">discount wedding dresses</a> and cheap smart dresses free shipping - <a href="javascript:if(confirm('http://www.weddingdresstrend.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.weddingdresstrend.com/'" tppabs="http://www.weddingdresstrend.com/">Weddingdresstrend.com</a>
+      			</p>
+	    <p>
+			<a href="javascript:if(confirm('http://www.topwedding.de/brautkleider-de  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.topwedding.de/brautkleider-de'" tppabs="http://www.topwedding.de/brautkleider-de">Brautkleider</a> auf <a href="javascript:if(confirm('http://www.topwedding.de/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.topwedding.de/'" tppabs="http://www.topwedding.de/">Topwedding.de</a>
+            </p>
+	<p>
+	Find <a href="javascript:if(confirm('http://allwhatyouwant.net/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://allwhatyouwant.net/'" tppabs="http://allwhatyouwant.net/">free files to download</a> on <a href="javascript:if(confirm('http://allwhatyouwant.net/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://allwhatyouwant.net/'" tppabs="http://allwhatyouwant.net/">allwhatyouwant.net</a>
+	</p>
+            <p>
+Looking For <a href="javascript:if(confirm('http://www.tdbridal.com/cheap-wedding-dresses-c63/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.tdbridal.com/cheap-wedding-dresses-c63/'" tppabs="http://www.tdbridal.com/cheap-wedding-dresses-c63/">Affordable Wedding Dresses</a> 2015 at Best Prices On <a href="javascript:if(confirm('http://tdbridal.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://tdbridal.com/'" tppabs="http://tdbridal.com/">TDBridal.com</a>
+	    </p>
+            <p>
+                Shop high quality <a href="javascript:if(confirm('http://www.dresswe.co.uk/cheap-prom-dresses-uk-c-12/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.dresswe.co.uk/cheap-prom-dresses-uk-c-12/'" tppabs="http://www.dresswe.co.uk/cheap-prom-dresses-uk-c-12/">cheap prom dresses </a>on <a href="javascript:if(confirm('http://www.dresswe.co.uk/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.dresswe.co.uk/'" tppabs="http://www.dresswe.co.uk/">Dresswe.co.uk</a>
+            </p>
+            <p>
+		Buy New Arrival <a href="javascript:if(confirm('http://www.jdbridal.com/wholesale-prom-dresses-c47/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.jdbridal.com/wholesale-prom-dresses-c47/'" tppabs="http://www.jdbridal.com/wholesale-prom-dresses-c47/">Cheap Prom Dresses</a> 2015 at <a href="javascript:if(confirm('http://www.jdbridal.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.jdbridal.com/'" tppabs="http://www.jdbridal.com/">JDBRIDAL Prom Dress Store</a>
+            </p>
+          </div>
+        </div>        
+        <div class="box box1" id="bottomAd">
+          <h1 class="boxHead">Advertisement</h1>
+          <div align="center" class="boxContent">
+                	<script type="text/javascript"> 
+      			  GA_googleFillSlot("smarty_left_box");
+      			</script>
+          </div>
+        </div>
+
+      </div><!-- end colSecondary -->
+      
+      <div class="col colMain" id="mainContent">
+      
+<div class="navheader">
+<table width="100%" summary="Navigation header">
+<tr><th colspan="3" align="center">Smarty3 æ‰‹å†Œ</th></tr>
+<tr>
+<td width="20%" align="left">Â </td>
+<th width="60%" align="center">Â </th>
+<td width="20%" align="right">Â <a accesskey="n" href="preface.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/preface.tpl">Next</a>
+</td>
+</tr>
+</table>
+<hr>
+</div>
+<div lang="ã€ˆ" class="book" title="Smarty3 æ‰‹å†Œ">
+<div class="titlepage">
+<div>
+<div><h1 class="title">
+<a name="manual"></a>Smarty - PHPæ¨¡æ¿å¼•æ“</h1></div>
+<div><div class="authorgroup">
+<a name="authors"></a><div class="author"><h3 class="author">
+<span class="firstname">Monte</span> <span class="surname">Ohrt &lt;monte at ohrt dot com&gt;</span>
+</h3></div>
+<div class="author"><h3 class="author">
+<span class="firstname">Uwe</span> <span class="surname">Tews &lt;uwe dot tews at googlemail dot com&gt;</span>
+</h3></div>
+</div></div>
+<div><div class="authorgroup">
+<a name="translators"></a><div class="author"><h3 class="author">
+<span class="firstname">jake</span> <span class="surname">&lt;jake at speedphp dot com&gt;</span>
+</h3></div>
+</div></div>
+<div><p class="copyright">Copyright Â© 2001-2011 New Digital Group, Inc.</p></div>
+<div><p class="pubdate">2012-06-30</p></div>
+</div>
+<hr>
+</div>
+<div class="toc">
+<p><b>Table of Contents</b></p>
+<dl>
+<dt><span class="preface"><a href="preface.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/preface.tpl">åºè¨€</a></span></dt>
+<dt><span class="part"><a href="getting.started.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/getting.started.tpl">I. å¼€å§‹</a></span></dt>
+<dd><dl>
+<dt><span class="chapter"><a href="what.is.smarty.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/what.is.smarty.tpl">1. Smartyæ˜¯ä»€ä¹ˆ?</a></span></dt>
+<dt><span class="chapter"><a href="installation.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/installation.tpl">2. å®‰è£…</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="installation.tpl.htm#installation.requirements" tppabs="http://www.smarty.net/docs/zh_CN/installation.tpl#installation.requirements">ç¯å¢ƒéœ€æ±‚</a></span></dt>
+<dt><span class="sect1"><a href="installing.smarty.basic.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/installing.smarty.basic.tpl">åŸºç¡€å®‰è£…</a></span></dt>
+<dt><span class="sect1"><a href="installing.smarty.extended.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/installing.smarty.extended.tpl">è¿›é˜¶å®‰è£…</a></span></dt>
+</dl></dd>
+</dl></dd>
+<dt><span class="part"><a href="smarty.for.designers.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/smarty.for.designers.tpl">II. æ¨¡æ¿è®¾è®¡å¸ˆç¯‡</a></span></dt>
+<dd><dl>
+<dt><span class="chapter"><a href="language.basic.syntax.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.basic.syntax.tpl">3. åŸºæœ¬è¯­æ³•</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="language.basic.syntax.tpl.htm#language.syntax.comments" tppabs="http://www.smarty.net/docs/zh_CN/language.basic.syntax.tpl#language.syntax.comments">æ³¨é‡Š</a></span></dt>
+<dt><span class="sect1"><a href="language.syntax.variables.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.syntax.variables.tpl">å˜é‡</a></span></dt>
+<dt><span class="sect1"><a href="language.syntax.functions.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.syntax.functions.tpl">å‡½æ•°</a></span></dt>
+<dt><span class="sect1"><a href="language.syntax.attributes.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.syntax.attributes.tpl">å±æ€§</a></span></dt>
+<dt><span class="sect1"><a href="language.syntax.quotes.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.syntax.quotes.tpl">åŒå¼•å·ä¸­åµŒå…¥å˜é‡</a></span></dt>
+<dt><span class="sect1"><a href="language.math.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.math.tpl">æ•°å­¦è®¡ç®—</a></span></dt>
+<dt><span class="sect1"><a href="language.escaping.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.escaping.tpl">é¿å…Smartyè§£æ</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="language.variables.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.tpl">4. å˜é‡</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="language.variables.tpl.htm#language.assigned.variables" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.tpl#language.assigned.variables">ä»PHPèµ‹å€¼çš„å˜é‡</a></span></dt>
+<dd><dl>
+<dt><span class="sect2"><a href="language.variables.tpl.htm#language.variables.assoc.arrays" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.tpl#language.variables.assoc.arrays">æ•°ç»„èµ‹å€¼</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.tpl.htm#language.variables.array.indexes" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.tpl#language.variables.array.indexes">æ•°ç»„ä¸‹æ ‡</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.tpl.htm#language.variables.objects" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.tpl#language.variables.objects">å¯¹è±¡</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="language.variable.scopes.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.variable.scopes.tpl">å˜é‡ä½œç”¨èŒƒå›´</a></span></dt>
+<dt><span class="sect1"><a href="language.config.variables.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.config.variables.tpl">ä»é…ç½®æ–‡ä»¶è·å–çš„å˜é‡</a></span></dt>
+<dt><span class="sect1"><a href="language.variables.smarty.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl">{$smarty} ä¿ç•™å˜é‡</a></span></dt>
+<dd><dl>
+<dt><span class="sect2"><a href="language.variables.smarty.tpl.htm#language.variables.smarty.request" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#language.variables.smarty.request">é¡µé¢è¯·æ±‚å˜é‡</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.tpl.htm#language.variables.smarty.now" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#language.variables.smarty.now">{$smarty.now}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.tpl.htm#language.variables.smarty.const" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#language.variables.smarty.const">{$smarty.const}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.tpl.htm#language.variables.smarty.capture" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#language.variables.smarty.capture">{$smarty.capture}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.tpl.htm#language.variables.smarty.config" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#language.variables.smarty.config">{$smarty.config}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.tpl.htm#language.variables.smarty.loops" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#language.variables.smarty.loops">{$smarty.section}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.tpl.htm#language.variables.smarty.template" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#language.variables.smarty.template">{$smarty.template}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.tpl.htm#language.variables.smarty.template_object" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#language.variables.smarty.template_object">{$smarty.template_object}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.tpl.htm#language.variables.smarty.current_dir" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#language.variables.smarty.current_dir">{$smarty.current_dir}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.tpl.htm#language.variables.smarty.version" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#language.variables.smarty.version">{$smarty.version}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.tpl.htm#language.variables.smarty.block.child" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#language.variables.smarty.block.child">{$smarty.block.child}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.tpl.htm#language.variables.smarty.block.parent" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#language.variables.smarty.block.parent">{$smarty.block.parent}</a></span></dt>
+<dt><span class="sect2"><a href="language.variables.smarty.tpl.htm#language.variables.smarty.ldelim" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#language.variables.smarty.ldelim">{$smarty.ldelim}, {$smarty.rdelim}</a></span></dt>
+</dl></dd>
+</dl></dd>
+<dt><span class="chapter"><a href="language.modifiers.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifiers.tpl">5. å˜é‡ä¿®é¥°å™¨</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="language.modifiers.tpl.htm#language.modifier.capitalize" tppabs="http://www.smarty.net/docs/zh_CN/language.modifiers.tpl#language.modifier.capitalize">capitalize</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.cat.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.cat.tpl">cat</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.count.characters.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.count.characters.tpl">count_characters</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.count.paragraphs.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.count.paragraphs.tpl">count_paragraphs</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.count.sentences.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.count.sentences.tpl">count_sentences</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.count.words.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.count.words.tpl">count_words</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.date.format.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.date.format.tpl">date_format</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.default.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.default.tpl">default</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.escape.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.escape.tpl">escape</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.from_charset.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.from_charset.tpl">from_charset</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.indent.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.indent.tpl">indent</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.lower.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.lower.tpl">lower</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.nl2br.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.nl2br.tpl">nl2br</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.regex.replace.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.regex.replace.tpl">regex_replace</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.replace.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.replace.tpl">replace</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.spacify.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.spacify.tpl">spacify</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.string.format.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.string.format.tpl">string_format</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.strip.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.strip.tpl">strip</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.strip.tags.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.strip.tags.tpl">strip_tags</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.to_charset.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.to_charset.tpl">to_charset</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.truncate.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.truncate.tpl">truncate</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.unescape.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.unescape.tpl">unescape</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.upper.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.upper.tpl">upper</a></span></dt>
+<dt><span class="sect1"><a href="language.modifier.wordwrap.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.wordwrap.tpl">wordwrap</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="language.combining.modifiers.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.combining.modifiers.tpl">6. å¤åˆä¿®é¥°å™¨</a></span></dt>
+<dt><span class="chapter"><a href="language.builtin.functions.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.builtin.functions.tpl">7. å†…ç½®å‡½æ•°</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="language.builtin.functions.tpl.htm#language.function.shortform.assign" tppabs="http://www.smarty.net/docs/zh_CN/language.builtin.functions.tpl#language.function.shortform.assign">{$var=...}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.append.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.append.tpl">{append}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.assign.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.assign.tpl">{assign}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.block.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.block.tpl">{block}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.call.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.call.tpl">{call}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.capture.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.capture.tpl">{capture}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.config.load.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.config.load.tpl">{config_load}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.debug.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.debug.tpl">{debug}</a></span></dt>
+<dt><span class="sect1"><a href="javascript:if(confirm('http://www.smarty.net/docs/zh_CN/language.function.extends.tpl  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ²»¿ÉÓÃ, »ò·ÅÆúÁËÏÂÔØ, »òÏîÄ¿¼´½«Í£Ö¹¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/docs/zh_CN/language.function.extends.tpl'" tppabs="http://www.smarty.net/docs/zh_CN/language.function.extends.tpl">{extends}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.for.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.for.tpl">{for}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.foreach.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl">{foreach},{foreachelse}</a></span></dt>
+<dd><dl>
+<dt><span class="sect2"><a href="language.function.foreach.tpl.htm#foreach.property.index" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#foreach.property.index">@index</a></span></dt>
+<dt><span class="sect2"><a href="language.function.foreach.tpl.htm#foreach.property.iteration" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#foreach.property.iteration">@iteration</a></span></dt>
+<dt><span class="sect2"><a href="language.function.foreach.tpl.htm#foreach.property.first" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#foreach.property.first">@first</a></span></dt>
+<dt><span class="sect2"><a href="language.function.foreach.tpl.htm#foreach.property.last" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#foreach.property.last">@last</a></span></dt>
+<dt><span class="sect2"><a href="language.function.foreach.tpl.htm#foreach.property.show" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#foreach.property.show">@show</a></span></dt>
+<dt><span class="sect2"><a href="language.function.foreach.tpl.htm#foreach.property.total" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#foreach.property.total">@total</a></span></dt>
+<dt><span class="sect2"><a href="language.function.foreach.tpl.htm#foreach.construct.break" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#foreach.construct.break">{break}</a></span></dt>
+<dt><span class="sect2"><a href="language.function.foreach.tpl.htm#foreach.construct.continue" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#foreach.construct.continue">{continue}</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="language.function.function.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.function.tpl">{function}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.if.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.if.tpl">{if},{elseif},{else}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.include.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.include.tpl">{include}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.include.php.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.include.php.tpl">{include_php}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.insert.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.insert.tpl">{insert}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.ldelim.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.ldelim.tpl">{ldelim},{rdelim}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.literal.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.literal.tpl">{literal}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.nocache.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.nocache.tpl">{nocache}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.php.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.php.tpl">{php}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.section.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl">{section},{sectionelse}</a></span></dt>
+<dd><dl>
+<dt><span class="sect2"><a href="language.function.section.tpl.htm#section.property.index" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#section.property.index">.index</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.tpl.htm#section.property.index.prev" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#section.property.index.prev">.index_prev</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.tpl.htm#section.property.index.next" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#section.property.index.next">.index_next</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.tpl.htm#section.property.iteration" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#section.property.iteration">.iteration</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.tpl.htm#section.property.first" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#section.property.first">.first</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.tpl.htm#section.property.last" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#section.property.last">.last</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.tpl.htm#section.property.rownum" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#section.property.rownum">.rownum</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.tpl.htm#section.property.loop" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#section.property.loop">.loop</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.tpl.htm#section.property.show" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#section.property.show">.show</a></span></dt>
+<dt><span class="sect2"><a href="language.function.section.tpl.htm#section.property.total" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#section.property.total">.total</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="language.function.setfilter.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.setfilter.tpl">{setfilter}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.strip.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.strip.tpl">{strip}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.while.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.while.tpl">{while}</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="language.custom.functions.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.custom.functions.tpl">8. è‡ªå®šä¹‰å‡½æ•°</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="language.custom.functions.tpl.htm#language.function.counter" tppabs="http://www.smarty.net/docs/zh_CN/language.custom.functions.tpl#language.function.counter">{counter}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.cycle.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.cycle.tpl">{cycle}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.eval.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.eval.tpl">{eval}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.fetch.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.fetch.tpl">{fetch}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.checkboxes.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.checkboxes.tpl">{html_checkboxes}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.image.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.image.tpl">{html_image}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.options.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.options.tpl">{html_options}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.radios.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.radios.tpl">{html_radios}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.select.date.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.select.date.tpl">{html_select_date}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.select.time.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.select.time.tpl">{html_select_time}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.html.table.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.table.tpl">{html_table}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.mailto.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.mailto.tpl">{mailto}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.math.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.math.tpl">{math}</a></span></dt>
+<dt><span class="sect1"><a href="language.function.textformat.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/language.function.textformat.tpl">{textformat}</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="config.files.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/config.files.tpl">9. é…ç½®æ–‡ä»¶</a></span></dt>
+<dt><span class="chapter"><a href="chapter.debugging.console.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/chapter.debugging.console.tpl">10. è°ƒè¯•æ§åˆ¶å°</a></span></dt>
+</dl></dd>
+<dt><span class="part"><a href="smarty.for.programmers.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/smarty.for.programmers.tpl">III. ç¨‹åºå¼€å‘è€…ç¯‡</a></span></dt>
+<dd><dl>
+<dt><span class="chapter"><a href="charset.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/charset.tpl">11. å­—ç¬¦é›†ç¼–ç </a></span></dt>
+<dd><dl><dt><span class="sect1"><a href="charset.tpl.htm#charset.encoding" tppabs="http://www.smarty.net/docs/zh_CN/charset.tpl#charset.encoding">å­—ç¬¦é›†ç¼–ç </a></span></dt></dl></dd>
+<dt><span class="chapter"><a href="smarty.constants.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/smarty.constants.tpl">12. å¸¸é‡</a></span></dt>
+<dd><dl><dt><span class="sect1"><a href="smarty.constants.tpl.htm#constant.smarty.dir" tppabs="http://www.smarty.net/docs/zh_CN/smarty.constants.tpl#constant.smarty.dir">SMARTY_DIR</a></span></dt></dl></dd>
+<dt><span class="chapter"><a href="api.variables.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.variables.tpl">13. Smartyæˆå‘˜å˜é‡</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="api.variables.tpl.htm#variable.allow.php.templates" tppabs="http://www.smarty.net/docs/zh_CN/api.variables.tpl#variable.allow.php.templates">$allow_php_templates</a></span></dt>
+<dt><span class="sect1"><a href="variable.auto.literal.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.auto.literal.tpl">$auto_literal</a></span></dt>
+<dt><span class="sect1"><a href="variable.autoload.filters.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.autoload.filters.tpl">$autoload_filters</a></span></dt>
+<dt><span class="sect1"><a href="variable.cache.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.cache.dir.tpl">$cache_dir</a></span></dt>
+<dt><span class="sect1"><a href="variable.cache.id.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.cache.id.tpl">$cache_id</a></span></dt>
+<dt><span class="sect1"><a href="variable.cache.lifetime.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.cache.lifetime.tpl">$cache_lifetime</a></span></dt>
+<dt><span class="sect1"><a href="variable.cache.locking.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.cache.locking.tpl">$cache_locking</a></span></dt>
+<dt><span class="sect1"><a href="variable.cache.modified.check.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.cache.modified.check.tpl">$cache_modified_check</a></span></dt>
+<dt><span class="sect1"><a href="variable.caching.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.caching.tpl">$caching</a></span></dt>
+<dt><span class="sect1"><a href="variable.caching.type.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.caching.type.tpl">$caching_type</a></span></dt>
+<dt><span class="sect1"><a href="variable.compile.check.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.compile.check.tpl">$compile_check</a></span></dt>
+<dt><span class="sect1"><a href="variable.compile.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.compile.dir.tpl">$compile_dir</a></span></dt>
+<dt><span class="sect1"><a href="variable.compile.id.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.compile.id.tpl">$compile_id</a></span></dt>
+<dt><span class="sect1"><a href="variable.compile.locking.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.compile.locking.tpl">$compile_locking</a></span></dt>
+<dt><span class="sect1"><a href="variable.compiler.class.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.compiler.class.tpl">$compiler_class</a></span></dt>
+<dt><span class="sect1"><a href="variable.config.booleanize.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.config.booleanize.tpl">$config_booleanize</a></span></dt>
+<dt><span class="sect1"><a href="variable.config.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.config.dir.tpl">$config_dir</a></span></dt>
+<dt><span class="sect1"><a href="variable.config.overwrite.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.config.overwrite.tpl">$config_overwrite</a></span></dt>
+<dt><span class="sect1"><a href="variable.config.read.hidden.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.config.read.hidden.tpl">$config_read_hidden</a></span></dt>
+<dt><span class="sect1"><a href="variable.debug_template.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.debug_template.tpl">$debug_tpl</a></span></dt>
+<dt><span class="sect1"><a href="variable.debugging.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.debugging.tpl">$debugging</a></span></dt>
+<dt><span class="sect1"><a href="variable.debugging.ctrl.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.debugging.ctrl.tpl">$debugging_ctrl</a></span></dt>
+<dt><span class="sect1"><a href="variable.default.config.type.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.default.config.type.tpl">$default_config_type</a></span></dt>
+<dt><span class="sect1"><a href="variable.default.modifiers.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.default.modifiers.tpl">$default_modifiers</a></span></dt>
+<dt><span class="sect1"><a href="variable.default.resource.type.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.default.resource.type.tpl">$default_resource_type</a></span></dt>
+<dt><span class="sect1"><a href="variable.default.config.handler.func.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.default.config.handler.func.tpl">$default_config_handler_func</a></span></dt>
+<dt><span class="sect1"><a href="variable.default.template.handler.func.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.default.template.handler.func.tpl">$default_template_handler_func</a></span></dt>
+<dt><span class="sect1"><a href="variable.direct.access.security.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.direct.access.security.tpl">$direct_access_security</a></span></dt>
+<dt><span class="sect1"><a href="variable.error.reporting.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.error.reporting.tpl">$error_reporting</a></span></dt>
+<dt><span class="sect1"><a href="variable.escape.html.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.escape.html.tpl">$escape_html</a></span></dt>
+<dt><span class="sect1"><a href="variable.force.cache.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.force.cache.tpl">$force_cache</a></span></dt>
+<dt><span class="sect1"><a href="variable.force.compile.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.force.compile.tpl">$force_compile</a></span></dt>
+<dt><span class="sect1"><a href="variable.left.delimiter.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.left.delimiter.tpl">$left_delimiter</a></span></dt>
+<dt><span class="sect1"><a href="variable.locking.timeout.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.locking.timeout.tpl">$locking_timeout</a></span></dt>
+<dt><span class="sect1"><a href="variable.merge.compiled.includes.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.merge.compiled.includes.tpl">$merge_compiled_includes</a></span></dt>
+<dt><span class="sect1"><a href="variable.php.handling.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.php.handling.tpl">$php_handling</a></span></dt>
+<dt><span class="sect1"><a href="variable.plugins.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.plugins.dir.tpl">$plugins_dir</a></span></dt>
+<dt><span class="sect1"><a href="variable.right.delimiter.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.right.delimiter.tpl">$right_delimiter</a></span></dt>
+<dt><span class="sect1"><a href="variable.smarty.debug.id.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.smarty.debug.id.tpl">$smarty_debug_id</a></span></dt>
+<dt><span class="sect1"><a href="variable.template.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.template.dir.tpl">$template_dir</a></span></dt>
+<dt><span class="sect1"><a href="variable.trusted.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.trusted.dir.tpl">$trusted_dir</a></span></dt>
+<dt><span class="sect1"><a href="variable.use.include.path.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.use.include.path.tpl">$use_include_path</a></span></dt>
+<dt><span class="sect1"><a href="variable.use.sub.dirs.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/variable.use.sub.dirs.tpl">$use_sub_dirs</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="api.functions.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.functions.tpl">14. Smartyæˆå‘˜æ–¹æ³•</a></span></dt>
+<dd><dl>
+<dt>
+<span class="refentrytitle"><a href="api.add.config.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.add.config.dir.tpl">addConfigDir()</a></span><span class="refpurpose"> â€” å¢åŠ ä¸€ä¸ªé…ç½®æ–‡ä»¶ç›®å½•</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.add.plugins.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.add.plugins.dir.tpl">addPluginsDir()</a></span><span class="refpurpose"> â€” å¢åŠ ä¸€ä¸ªæ’ä»¶ç›®å½•</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.add.template.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.add.template.dir.tpl">addTemplateDir()</a></span><span class="refpurpose"> â€” å¢åŠ ä¸€ä¸ªæ¨¡æ¿æ–‡ä»¶ç›®å½•</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.append.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.append.tpl">append()</a></span><span class="refpurpose"> â€” æŠŠå€¼è¿½åŠ åˆ°æ•°ç»„ã€‚</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.append.by.ref.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.append.by.ref.tpl">appendByRef()</a></span><span class="refpurpose"> â€” å¼•ç”¨è¿½åŠ </span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.assign.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.assign.tpl">assign()</a></span><span class="refpurpose"> â€” èµ‹å€¼</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.assign.by.ref.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.assign.by.ref.tpl">assignByRef()</a></span><span class="refpurpose"> â€” å¼•ç”¨èµ‹å€¼</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.clear.all.assign.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.clear.all.assign.tpl">clearAllAssign()</a></span><span class="refpurpose"> â€” æ¸…é™¤å…¨éƒ¨èµ‹å€¼</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.clear.all.cache.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.clear.all.cache.tpl">clearAllCache()</a></span><span class="refpurpose"> â€” æ¸…é™¤å…¨éƒ¨ç¼“å­˜</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.clear.assign.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.clear.assign.tpl">clearAssign()</a></span><span class="refpurpose"> â€” æ¸…é™¤èµ‹å€¼</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.clear.cache.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.clear.cache.tpl">clearCache()</a></span><span class="refpurpose"> â€” æ¸…é™¤ç¼“å­˜</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.clear.compiled.tpl.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.clear.compiled.tpl.tpl">clearCompiledTemplate()</a></span><span class="refpurpose"> â€” æ¸…é™¤æ¨¡æ¿ç¼–è¯‘æ–‡ä»¶</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.clear.config.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.clear.config.tpl">clearConfig()</a></span><span class="refpurpose"> â€” æ¸…é™¤é…ç½®</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.compile.all.config.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.compile.all.config.tpl">compileAllConfig()</a></span><span class="refpurpose"> â€” ç¼–è¯‘å…¨éƒ¨é…ç½®æ–‡ä»¶</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.compile.all.templates.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.compile.all.templates.tpl">compileAllTemplates()</a></span><span class="refpurpose"> â€” ç¼–è¯‘å…¨éƒ¨æ¨¡æ¿</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.config.load.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.config.load.tpl">configLoad()</a></span><span class="refpurpose"> â€” è½½å…¥é¢„é…ç½®çš„å˜é‡</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.create.data.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.create.data.tpl">createData()</a></span><span class="refpurpose"> â€” åˆ›å»ºæ•°æ®å¯¹è±¡</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.create.template.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.create.template.tpl">createTemplate()</a></span><span class="refpurpose"> â€” åˆ›å»ºæ¨¡æ¿å¯¹è±¡</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.disable.security.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.disable.security.tpl">disableSecurity()</a></span><span class="refpurpose"> â€” å…³é—­å®‰å…¨æ£€æŸ¥</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.display.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.display.tpl">display()</a></span><span class="refpurpose"> â€” æ˜¾ç¤º</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.enable.security.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.enable.security.tpl">enableSecurity()</a></span><span class="refpurpose"> â€” å¼€å¯å®‰å…¨æ£€æŸ¥</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.fetch.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.fetch.tpl">fetch()</a></span><span class="refpurpose"> â€” å–å¾—è¾“å‡ºå†…å®¹</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.get.cache.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.get.cache.dir.tpl">getCacheDir()</a></span><span class="refpurpose"> â€” å–å¾—ç¼“å­˜ç›®å½•</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.get.compile.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.get.compile.dir.tpl">getCompileDir()</a></span><span class="refpurpose"> â€” å–å¾—ç¼–è¯‘ç›®å½•</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.get.config.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.get.config.dir.tpl">getConfigDir()</a></span><span class="refpurpose"> â€” å–å¾—é…ç½®æ–‡ä»¶ç›®å½•</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.get.config.vars.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.get.config.vars.tpl">getConfigVars()</a></span><span class="refpurpose"> â€” å–å¾—é¢„é…ç½®å˜é‡</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.get.plugins.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.get.plugins.dir.tpl">getPluginsDir()</a></span><span class="refpurpose"> â€” å–å¾—æ’ä»¶ç›®å½•</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.get.registered.object.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.get.registered.object.tpl">getRegisteredObject()</a></span><span class="refpurpose"> â€” è·å–å·²æ³¨å†Œå¯¹è±¡</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.get.tags.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.get.tags.tpl">getTags()</a></span><span class="refpurpose"> â€” å–å¾—æ¨¡æ¿æ ‡ç­¾</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.get.template.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.get.template.dir.tpl">getTemplateDir()</a></span><span class="refpurpose"> â€” å–å¾—æ¨¡æ¿ç›®å½•</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.get.template.vars.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.get.template.vars.tpl">getTemplateVars()</a></span><span class="refpurpose"> â€” å–å¾—å˜é‡å€¼</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.is.cached.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.is.cached.tpl">isCached()</a></span><span class="refpurpose"> â€” æ£€æŸ¥æ¨¡æ¿æ˜¯å¦å·²ç»ç¼“å­˜</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.load.filter.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.load.filter.tpl">loadFilter()</a></span><span class="refpurpose"> â€” è½½å…¥è¿‡æ»¤æ’ä»¶</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.mute.expected.errors.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.mute.expected.errors.tpl">Smarty::muteExpectedErrors()</a></span><span class="refpurpose"> â€” å¿½ç•¥è„šæœ¬è­¦å‘Šä¿¡æ¯</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.register.cacheresource.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.register.cacheresource.tpl">registerCacheResource()</a></span><span class="refpurpose"> â€” æ³¨å†Œç¼“å­˜èµ„æº</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.register.class.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.register.class.tpl">registerClass()</a></span><span class="refpurpose"> â€” æ³¨å†Œç±»</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.register.default.plugin.handler.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.register.default.plugin.handler.tpl">registerDefaultPluginHandler()</a></span><span class="refpurpose"> â€” æ³¨å†Œé»˜è®¤æ’ä»¶å¤„ç†å™¨</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.register.filter.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.register.filter.tpl">registerFilter()</a></span><span class="refpurpose"> â€” æ³¨å†Œè¿‡æ»¤å™¨</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.register.plugin.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.register.plugin.tpl">registerPlugin()</a></span><span class="refpurpose"> â€” æ³¨å†Œæ’ä»¶</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.register.object.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.register.object.tpl">registerObject()</a></span><span class="refpurpose"> â€” æ³¨å†Œå¯¹è±¡</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.register.resource.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.register.resource.tpl">registerResource()</a></span><span class="refpurpose"> â€” æ³¨å†Œèµ„æº</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.set.cache.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.set.cache.dir.tpl">setCacheDir()</a></span><span class="refpurpose"> â€” è®¾ç½®ç¼“å­˜ç›®å½•</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.set.compile.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.set.compile.dir.tpl">setCompileDir()</a></span><span class="refpurpose"> â€” è®¾ç½®ç¼–è¯‘ç›®å½•</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.set.config.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.set.config.dir.tpl">setConfigDir()</a></span><span class="refpurpose"> â€” è®¾ç½®é…ç½®ç›®å½•</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.set.plugins.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.set.plugins.dir.tpl">setPluginsDir()</a></span><span class="refpurpose"> â€” è®¾ç½®æ’ä»¶ç›®å½•</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.set.template.dir.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.set.template.dir.tpl">setTemplateDir()</a></span><span class="refpurpose"> â€” è®¾ç½®æ¨¡æ¿ç›®å½•</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.template.exists.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.template.exists.tpl">templateExists()</a></span><span class="refpurpose"> â€” æ£€æŸ¥æ¨¡æ¿æ˜¯å¦å­˜åœ¨</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.unregister.cacheresource.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.unregister.cacheresource.tpl">unregisterCacheResource()</a></span><span class="refpurpose"> â€” æ³¨é”€ç¼“å­˜èµ„æº</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.unregister.filter.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.unregister.filter.tpl">unregisterFilter()</a></span><span class="refpurpose"> â€” æ³¨é”€è¿‡æ»¤å™¨</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.unregister.plugin.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.unregister.plugin.tpl">unregisterPlugin</a></span><span class="refpurpose"> â€” æ³¨é”€æ’ä»¶</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.unregister.object.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.unregister.object.tpl">unregisterObject()</a></span><span class="refpurpose"> â€” æ³¨é”€å¯¹è±¡</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.unregister.resource.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.unregister.resource.tpl">unregisterResource()</a></span><span class="refpurpose"> â€” æ³¨é”€èµ„æº</span>
+</dt>
+<dt>
+<span class="refentrytitle"><a href="api.test.install.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/api.test.install.tpl">testInstall()</a></span><span class="refpurpose"> â€” æµ‹è¯•Smartyå®‰è£…</span>
+</dt>
+</dl></dd>
+<dt><span class="chapter"><a href="caching.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/caching.tpl">15. ç¼“å­˜</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="caching.tpl.htm#caching.setting.up" tppabs="http://www.smarty.net/docs/zh_CN/caching.tpl#caching.setting.up">é…ç½®ç¼“å­˜æ—¶é—´</a></span></dt>
+<dt><span class="sect1"><a href="caching.multiple.caches.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/caching.multiple.caches.tpl">å•é¡µå¤šä¸ªç¼“å­˜</a></span></dt>
+<dt><span class="sect1"><a href="caching.groups.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/caching.groups.tpl">ç¼“å­˜ç»„</a></span></dt>
+<dt><span class="sect1"><a href="caching.cacheable.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/caching.cacheable.tpl">æ§åˆ¶è¾“å‡ºç¼“å­˜</a></span></dt>
+<dd><dl>
+<dt><span class="sect2"><a href="caching.cacheable.tpl.htm#cacheability.sections" tppabs="http://www.smarty.net/docs/zh_CN/caching.cacheable.tpl#cacheability.sections">æ¨¡æ¿åŒºåŸŸç¼“å­˜æ§åˆ¶</a></span></dt>
+<dt><span class="sect2"><a href="caching.cacheable.tpl.htm#cacheability.tags" tppabs="http://www.smarty.net/docs/zh_CN/caching.cacheable.tpl#cacheability.tags">æ ‡ç­¾çš„ç¼“å­˜æ§åˆ¶</a></span></dt>
+<dt><span class="sect2"><a href="caching.cacheable.tpl.htm#cacheability.variables" tppabs="http://www.smarty.net/docs/zh_CN/caching.cacheable.tpl#cacheability.variables">å˜é‡çš„ç¼“å­˜æ§åˆ¶</a></span></dt>
+<dt><span class="sect2"><a href="caching.cacheable.tpl.htm#cacheability.plugins" tppabs="http://www.smarty.net/docs/zh_CN/caching.cacheable.tpl#cacheability.plugins">æ’ä»¶çš„ç¼“å­˜æ§åˆ¶</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="caching.custom.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/caching.custom.tpl">è‡ªå®šä¹‰ç¼“å­˜å®ç°</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="resources.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/resources.tpl">16. èµ„æº</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="resources.tpl.htm#resources.file" tppabs="http://www.smarty.net/docs/zh_CN/resources.tpl#resources.file">æ–‡ä»¶èµ„æº</a></span></dt>
+<dd><dl>
+<dt><span class="sect2"><a href="resources.tpl.htm#templates.from.template.dir" tppabs="http://www.smarty.net/docs/zh_CN/resources.tpl#templates.from.template.dir">$template_dirç›®å½•</a></span></dt>
+<dt><span class="sect2"><a href="resources.tpl.htm#templates.from.specified.template.dir" tppabs="http://www.smarty.net/docs/zh_CN/resources.tpl#templates.from.specified.template.dir">ç‰¹å®šçš„$template_dir</a></span></dt>
+<dt><span class="sect2"><a href="resources.tpl.htm#templates.from.any.dir" tppabs="http://www.smarty.net/docs/zh_CN/resources.tpl#templates.from.any.dir">ä»»æ„ç›®å½•çš„æ¨¡æ¿</a></span></dt>
+<dt><span class="sect2"><a href="resources.tpl.htm#templates.windows.filepath" tppabs="http://www.smarty.net/docs/zh_CN/resources.tpl#templates.windows.filepath">Windowsæ–‡ä»¶è·¯å¾„</a></span></dt>
+</dl></dd>
+<dt><span class="sect1"><a href="resources.string.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/resources.string.tpl">å­—ç¬¦ä¸²èµ„æº</a></span></dt>
+<dt><span class="sect1"><a href="resources.streams.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/resources.streams.tpl">æ•°æ®æµèµ„æº</a></span></dt>
+<dt><span class="sect1"><a href="resources.extends.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/resources.extends.tpl">æ‰©å±•æ¨¡æ¿èµ„æº</a></span></dt>
+<dt><span class="sect1"><a href="resources.custom.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/resources.custom.tpl">è‡ªå®šä¹‰æ¨¡æ¿èµ„æº</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="advanced.features.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.tpl">17. é«˜çº§ç‰¹æ€§</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="advanced.features.tpl.htm#advanced.features.security" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.tpl#advanced.features.security">å®‰å…¨</a></span></dt>
+<dt><span class="sect1"><a href="advanced.features.template.settings.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.template.settings.tpl">ä¿®æ”¹æ¨¡æ¿è®¾ç½®</a></span></dt>
+<dt><span class="sect1"><a href="advanced.features.template.inheritance.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.template.inheritance.tpl">æ¨¡æ¿ç»§æ‰¿</a></span></dt>
+<dt><span class="sect1"><a href="advanced.features.streams.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.streams.tpl">æ•°æ®æµ</a></span></dt>
+<dt><span class="sect1"><a href="advanced.features.objects.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.objects.tpl">å¯¹è±¡</a></span></dt>
+<dt><span class="sect1"><a href="advanced.features.static.classes.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.static.classes.tpl">é™æ€ç±»</a></span></dt>
+<dt><span class="sect1"><a href="advanced.features.prefilters.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.prefilters.tpl">å‰ç½®è¿‡æ»¤å™¨</a></span></dt>
+<dt><span class="sect1"><a href="advanced.features.postfilters.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.postfilters.tpl">åç½®è¿‡æ»¤å™¨</a></span></dt>
+<dt><span class="sect1"><a href="advanced.features.outputfilters.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.outputfilters.tpl">è¾“å‡ºè¿‡æ»¤å™¨</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="plugins.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/plugins.tpl">18. ä»¥æ’ä»¶æ‰©å±•Smarty</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="plugins.tpl.htm#plugins.howto" tppabs="http://www.smarty.net/docs/zh_CN/plugins.tpl#plugins.howto">æ’ä»¶å¦‚ä½•å·¥ä½œ</a></span></dt>
+<dt><span class="sect1"><a href="plugins.naming.conventions.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/plugins.naming.conventions.tpl">å‘½åè§„åˆ™</a></span></dt>
+<dt><span class="sect1"><a href="plugins.writing.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/plugins.writing.tpl">ç¼–å†™æ’ä»¶</a></span></dt>
+<dt><span class="sect1"><a href="plugins.functions.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/plugins.functions.tpl">æ¨¡æ¿å‡½æ•°</a></span></dt>
+<dt><span class="sect1"><a href="plugins.modifiers.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/plugins.modifiers.tpl">ä¿®é¥°å™¨</a></span></dt>
+<dt><span class="sect1"><a href="plugins.block.functions.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/plugins.block.functions.tpl">å—å‡½æ•°</a></span></dt>
+<dt><span class="sect1"><a href="plugins.compiler.functions.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/plugins.compiler.functions.tpl">ç¼–è¯‘å‡½æ•°</a></span></dt>
+<dt><span class="sect1"><a href="plugins.prefilters.postfilters.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/plugins.prefilters.postfilters.tpl">å‰ç½®/åç½®è¿‡æ»¤å™¨</a></span></dt>
+<dt><span class="sect1"><a href="plugins.outputfilters.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/plugins.outputfilters.tpl">è¾“å‡ºè¿‡æ»¤å™¨</a></span></dt>
+<dt><span class="sect1"><a href="plugins.resources.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/plugins.resources.tpl">èµ„æºæ’ä»¶</a></span></dt>
+<dt><span class="sect1"><a href="plugins.inserts.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/plugins.inserts.tpl">æ’å…¥æ’ä»¶</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="bc.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/bc.tpl">19. SmartyBC - å‘å‰å…¼å®¹çš„ç±»åº“</a></span></dt>
+<dd><dl><dt><span class="sect1"><a href="bc.tpl.htm#bc.class" tppabs="http://www.smarty.net/docs/zh_CN/bc.tpl#bc.class">SmartyBC ç±»</a></span></dt></dl></dd>
+</dl></dd>
+<dt><span class="part"><a href="appendixes.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/appendixes.tpl">IV. é™„å½•</a></span></dt>
+<dd><dl>
+<dt><span class="chapter"><a href="troubleshooting.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/troubleshooting.tpl">20. ç–‘éš¾è§£ç­”</a></span></dt>
+<dd><dl><dt><span class="sect1"><a href="troubleshooting.tpl.htm#smarty.php.errors" tppabs="http://www.smarty.net/docs/zh_CN/troubleshooting.tpl#smarty.php.errors">Smarty/PHP é”™è¯¯</a></span></dt></dl></dd>
+<dt><span class="chapter"><a href="tips.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/tips.tpl">21. æŠ€å·§</a></span></dt>
+<dd><dl>
+<dt><span class="sect1"><a href="tips.tpl.htm#tips.blank.var.handling" tppabs="http://www.smarty.net/docs/zh_CN/tips.tpl#tips.blank.var.handling">ç©ºå˜é‡çš„å¤„ç†</a></span></dt>
+<dt><span class="sect1"><a href="tips.default.var.handling.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/tips.default.var.handling.tpl">é»˜è®¤å˜é‡å¤„ç†</a></span></dt>
+<dt><span class="sect1"><a href="tips.passing.vars.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/tips.passing.vars.tpl">ä¼ é€’æ ‡é¢˜åˆ°å¤´éƒ¨æ¨¡æ¿</a></span></dt>
+<dt><span class="sect1"><a href="tips.dates.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/tips.dates.tpl">æ—¥æœŸæ—¶é—´</a></span></dt>
+<dt><span class="sect1"><a href="tips.wap.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/tips.wap.tpl">WAP/WMLé¡µé¢</a></span></dt>
+<dt><span class="sect1"><a href="tips.componentized.templates.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/tips.componentized.templates.tpl">ç»„ä»¶åŒ–æ¨¡æ¿</a></span></dt>
+<dt><span class="sect1"><a href="tips.obfuscating.email.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/tips.obfuscating.email.tpl">æ··æ·†ç”µå­é‚®ä»¶åœ°å€</a></span></dt>
+</dl></dd>
+<dt><span class="chapter"><a href="inforesources.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/inforesources.tpl">22. èµ„æ–™</a></span></dt>
+<dt><span class="chapter"><a href="bugs.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/bugs.tpl">23. BUGS</a></span></dt>
+</dl></dd>
+</dl>
+</div>
+<div class="list-of-examples">
+<p><b>List of Examples</b></p>
+<dl>
+<dt>2.1. <a href="installing.smarty.basic.tpl.htm#id404018" tppabs="http://www.smarty.net/docs/zh_CN/installing.smarty.basic.tpl#id404018">è½½å…¥Smartyåº“æ–‡ä»¶</a>
+</dt>
+<dt>2.2. <a href="installing.smarty.basic.tpl.htm#id404119" tppabs="http://www.smarty.net/docs/zh_CN/installing.smarty.basic.tpl#id404119">æ‰‹åŠ¨æŒ‡å®š SMARTY_DIR å¸¸é‡</a>
+</dt>
+<dt>2.3. <a href="installing.smarty.basic.tpl.htm#id404132" tppabs="http://www.smarty.net/docs/zh_CN/installing.smarty.basic.tpl#id404132">ç”¨ç»å¯¹è·¯å¾„å¼•ç”¨åº“æ–‡ä»¶</a>
+</dt>
+<dt>2.4. <a href="installing.smarty.basic.tpl.htm#id404154" tppabs="http://www.smarty.net/docs/zh_CN/installing.smarty.basic.tpl#id404154">å°†åº“æ–‡ä»¶è·¯å¾„å¢åŠ åˆ°<code class="filename">php.ini</code> æ–‡ä»¶</a>
+</dt>
+<dt>2.5. <a href="installing.smarty.basic.tpl.htm#id404177" tppabs="http://www.smarty.net/docs/zh_CN/installing.smarty.basic.tpl#id404177">é€šè¿‡å‡½æ•°ini_set()
+	æ¥è®¾ç½®include path
+    </a>
+</dt>
+<dt>2.6. <a href="installing.smarty.basic.tpl.htm#id404314" tppabs="http://www.smarty.net/docs/zh_CN/installing.smarty.basic.tpl#id404314">ç›®å½•æ–‡ä»¶ç»“æ„</a>
+</dt>
+<dt>2.7. <a href="installing.smarty.basic.tpl.htm#id404435" tppabs="http://www.smarty.net/docs/zh_CN/installing.smarty.basic.tpl#id404435">è®¾ç½®ç›®å½•çš„è¯»å†™æƒé™</a>
+</dt>
+<dt>2.8. <a href="installing.smarty.basic.tpl.htm#id404499" tppabs="http://www.smarty.net/docs/zh_CN/installing.smarty.basic.tpl#id404499">/web/www.example.com/guestbook/templates/index.tpl</a>
+</dt>
+<dt>2.9. <a href="installing.smarty.basic.tpl.htm#id404564" tppabs="http://www.smarty.net/docs/zh_CN/installing.smarty.basic.tpl#id404564">ä¿®æ”¹ /web/www.example.com/docs/guestbook/index.php</a>
+</dt>
+<dt>2.10. <a href="installing.smarty.extended.tpl.htm#id404679" tppabs="http://www.smarty.net/docs/zh_CN/installing.smarty.extended.tpl#id404679">/php/includes/guestbook/setup.php</a>
+</dt>
+<dt>2.11. <a href="installing.smarty.extended.tpl.htm#id404721" tppabs="http://www.smarty.net/docs/zh_CN/installing.smarty.extended.tpl#id404721">/web/www.example.com/guestbook/htdocs/index.php</a>
+</dt>
+<dt>3.1. <a href="language.basic.syntax.tpl.htm#id406276" tppabs="http://www.smarty.net/docs/zh_CN/language.basic.syntax.tpl#id406276">æ³¨é‡Šä¾‹å­</a>
+</dt>
+<dt>3.2. <a href="language.syntax.variables.tpl.htm#id406228" tppabs="http://www.smarty.net/docs/zh_CN/language.syntax.variables.tpl#id406228">å˜é‡</a>
+</dt>
+<dt>3.3. <a href="language.syntax.functions.tpl.htm#id406342" tppabs="http://www.smarty.net/docs/zh_CN/language.syntax.functions.tpl#id406342">å‡½æ•°è¯­æ³•</a>
+</dt>
+<dt>3.4. <a href="language.syntax.attributes.tpl.htm#id406644" tppabs="http://www.smarty.net/docs/zh_CN/language.syntax.attributes.tpl#id406644">å‡½æ•°å±æ€§è¯­æ³•</a>
+</dt>
+<dt>3.5. <a href="language.syntax.quotes.tpl.htm#id406905" tppabs="http://www.smarty.net/docs/zh_CN/language.syntax.quotes.tpl#id406905">ä¾‹å­</a>
+</dt>
+<dt>3.6. <a href="language.syntax.quotes.tpl.htm#id407272" tppabs="http://www.smarty.net/docs/zh_CN/language.syntax.quotes.tpl#id407272">ä¾‹å­</a>
+</dt>
+<dt>3.7. <a href="language.math.tpl.htm#id407020" tppabs="http://www.smarty.net/docs/zh_CN/language.math.tpl#id407020">æ•°å­¦è®¡ç®—ä¾‹å­</a>
+</dt>
+<dt>3.8. <a href="language.escaping.tpl.htm#id407600" tppabs="http://www.smarty.net/docs/zh_CN/language.escaping.tpl#id407600">ä½¿ç”¨è‡ªåŠ¨å¿½ç•¥è§£æçš„ç‰¹æ€§</a>
+</dt>
+<dt>3.9. <a href="language.escaping.tpl.htm#id407685" tppabs="http://www.smarty.net/docs/zh_CN/language.escaping.tpl#id407685">æ”¹å˜å®šç•Œç¬¦çš„ä¾‹å­</a>
+</dt>
+<dt>4.1. <a href="language.variables.tpl.htm#id408431" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.tpl#id408431">å˜é‡ä¾‹å­</a>
+</dt>
+<dt>4.2. <a href="language.variables.tpl.htm#id408483" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.tpl#id408483">å˜é‡èµ‹å€¼</a>
+</dt>
+<dt>4.3. <a href="language.variables.tpl.htm#id408858" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.tpl#id408858">æ•°ç»„å˜é‡</a>
+</dt>
+<dt>4.4. <a href="language.variables.tpl.htm#id408918" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.tpl#id408918">ä½¿ç”¨æ•°ç»„ä¸‹æ ‡</a>
+</dt>
+<dt>4.5. <a href="language.variables.tpl.htm#id408987" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.tpl#id408987">ä½¿ç”¨å¯¹è±¡</a>
+</dt>
+<dt>4.6. <a href="language.variable.scopes.tpl.htm#id409324" tppabs="http://www.smarty.net/docs/zh_CN/language.variable.scopes.tpl#id409324">å˜é‡èŒƒå›´çš„ä¾‹å­</a>
+</dt>
+<dt>4.7. <a href="language.config.variables.tpl.htm#id409550" tppabs="http://www.smarty.net/docs/zh_CN/language.config.variables.tpl#id409550">é…ç½®å˜é‡</a>
+</dt>
+<dt>4.8. <a href="language.variables.smarty.tpl.htm#id409887" tppabs="http://www.smarty.net/docs/zh_CN/language.variables.smarty.tpl#id409887">æ˜¾ç¤ºé¡µé¢è¯·æ±‚å˜é‡</a>
+</dt>
+<dt>5.1. <a href="language.modifiers.tpl.htm#id411550" tppabs="http://www.smarty.net/docs/zh_CN/language.modifiers.tpl#id411550">ä¿®é¥°å™¨ä¾‹å­</a>
+</dt>
+<dt>5.2. <a href="language.modifiers.tpl.htm#id412178" tppabs="http://www.smarty.net/docs/zh_CN/language.modifiers.tpl#id412178">capitalize</a>
+</dt>
+<dt>5.3. <a href="language.modifier.cat.tpl.htm#id412551" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.cat.tpl#id412551">cat</a>
+</dt>
+<dt>5.4. <a href="language.modifier.count.characters.tpl.htm#id412851" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.count.characters.tpl#id412851">count_characters</a>
+</dt>
+<dt>5.5. <a href="language.modifier.count.paragraphs.tpl.htm#id412688" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.count.paragraphs.tpl#id412688">count_paragraphs</a>
+</dt>
+<dt>5.6. <a href="language.modifier.count.sentences.tpl.htm#id413113" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.count.sentences.tpl#id413113">count_sentences</a>
+</dt>
+<dt>5.7. <a href="language.modifier.count.words.tpl.htm#id413074" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.count.words.tpl#id413074">count_words</a>
+</dt>
+<dt>5.8. <a href="language.modifier.date.format.tpl.htm#id413834" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.date.format.tpl#id413834">date_format</a>
+</dt>
+<dt>5.9. <a href="language.modifier.default.tpl.htm#id414750" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.default.tpl#id414750">default</a>
+</dt>
+<dt>5.10. <a href="language.modifier.escape.tpl.htm#id415268" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.escape.tpl#id415268">escape</a>
+</dt>
+<dt>5.11. <a href="language.modifier.escape.tpl.htm#id415299" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.escape.tpl#id415299">escapeçš„å¦ä¸€ä¸ªä¾‹å­</a>
+</dt>
+<dt>5.12. <a href="language.modifier.indent.tpl.htm#id416283" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.indent.tpl#id416283">indent</a>
+</dt>
+<dt>5.13. <a href="language.modifier.lower.tpl.htm#id416170" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.lower.tpl#id416170">lower</a>
+</dt>
+<dt>5.14. <a href="language.modifier.nl2br.tpl.htm#id416428" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.nl2br.tpl#id416428">nl2br</a>
+</dt>
+<dt>5.15. <a href="language.modifier.regex.replace.tpl.htm#id417096" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.regex.replace.tpl#id417096">regex_replace</a>
+</dt>
+<dt>5.16. <a href="language.modifier.replace.tpl.htm#id417513" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.replace.tpl#id417513">replace</a>
+</dt>
+<dt>5.17. <a href="language.modifier.spacify.tpl.htm#id417891" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.spacify.tpl#id417891">spacify</a>
+</dt>
+<dt>5.18. <a href="language.modifier.string.format.tpl.htm#id418243" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.string.format.tpl#id418243">string_format</a>
+</dt>
+<dt>5.19. <a href="language.modifier.strip.tpl.htm#id418503" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.strip.tpl#id418503">strip</a>
+</dt>
+<dt>5.20. <a href="language.modifier.strip.tags.tpl.htm#id418775" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.strip.tags.tpl#id418775">strip_tags</a>
+</dt>
+<dt>5.21. <a href="language.modifier.truncate.tpl.htm#id419585" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.truncate.tpl#id419585">truncate</a>
+</dt>
+<dt>5.22. <a href="language.modifier.unescape.tpl.htm#id420101" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.unescape.tpl#id420101">escape</a>
+</dt>
+<dt>5.23. <a href="language.modifier.upper.tpl.htm#id420185" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.upper.tpl#id420185">upper</a>
+</dt>
+<dt>5.24. <a href="language.modifier.wordwrap.tpl.htm#id420798" tppabs="http://www.smarty.net/docs/zh_CN/language.modifier.wordwrap.tpl#id420798">wordwrap</a>
+</dt>
+<dt>6.1. <a href="language.combining.modifiers.tpl.htm#id425471" tppabs="http://www.smarty.net/docs/zh_CN/language.combining.modifiers.tpl#id425471">å¤åˆä¿®é¥°å™¨</a>
+</dt>
+<dt>7.1. <a href="language.builtin.functions.tpl.htm#id426469" tppabs="http://www.smarty.net/docs/zh_CN/language.builtin.functions.tpl#id426469">ç®€å•èµ‹å€¼</a>
+</dt>
+<dt>7.2. <a href="language.builtin.functions.tpl.htm#id426493" tppabs="http://www.smarty.net/docs/zh_CN/language.builtin.functions.tpl#id426493">æ•°å­¦è¿ç®—èµ‹å€¼</a>
+</dt>
+<dt>7.3. <a href="language.builtin.functions.tpl.htm#id426507" tppabs="http://www.smarty.net/docs/zh_CN/language.builtin.functions.tpl#id426507">å¯¹æ•°ç»„å…ƒç´ èµ‹å€¼</a>
+</dt>
+<dt>7.4. <a href="language.builtin.functions.tpl.htm#id426520" tppabs="http://www.smarty.net/docs/zh_CN/language.builtin.functions.tpl#id426520">å¯¹å¤šç»´æ•°ç»„å…ƒç´ èµ‹å€¼</a>
+</dt>
+<dt>7.5. <a href="language.builtin.functions.tpl.htm#id426533" tppabs="http://www.smarty.net/docs/zh_CN/language.builtin.functions.tpl#id426533">é™„åŠ åˆ°æ•°ç»„</a>
+</dt>
+<dt>7.6. <a href="language.builtin.functions.tpl.htm#id426546" tppabs="http://www.smarty.net/docs/zh_CN/language.builtin.functions.tpl#id426546">èµ‹å€¼çš„ä½œç”¨èŒƒå›´</a>
+</dt>
+<dt>7.7. <a href="language.function.append.tpl.htm#id427201" tppabs="http://www.smarty.net/docs/zh_CN/language.function.append.tpl#id427201">{append}</a>
+</dt>
+<dt>7.8. <a href="language.function.assign.tpl.htm#id427819" tppabs="http://www.smarty.net/docs/zh_CN/language.function.assign.tpl#id427819">{assign}</a>
+</dt>
+<dt>7.9. <a href="language.function.assign.tpl.htm#id427844" tppabs="http://www.smarty.net/docs/zh_CN/language.function.assign.tpl#id427844">{assign} ä½¿ç”¨nocacheå±æ€§</a>
+</dt>
+<dt>7.10. <a href="language.function.assign.tpl.htm#id427868" tppabs="http://www.smarty.net/docs/zh_CN/language.function.assign.tpl#id427868">{assign} è¿›è¡Œæ•°å­¦è¿ç®—</a>
+</dt>
+<dt>7.11. <a href="language.function.assign.tpl.htm#id427883" tppabs="http://www.smarty.net/docs/zh_CN/language.function.assign.tpl#id427883">{assign} åœ¨è°ƒç”¨çš„æ¨¡æ¿å†…çš„ä½œç”¨èŒƒå›´</a>
+</dt>
+<dt>7.12. <a href="language.function.assign.tpl.htm#id427914" tppabs="http://www.smarty.net/docs/zh_CN/language.function.assign.tpl#id427914">{assign} ä½œç”¨èŒƒå›´ä¾‹å­ </a>
+</dt>
+<dt>7.13. <a href="language.function.assign.tpl.htm#id427937" tppabs="http://www.smarty.net/docs/zh_CN/language.function.assign.tpl#id427937">{assign} èµ‹å€¼ä¸€ä¸ªå…¨å±€å˜é‡</a>
+</dt>
+<dt>7.14. <a href="language.function.assign.tpl.htm#id427955" tppabs="http://www.smarty.net/docs/zh_CN/language.function.assign.tpl#id427955">ä»PHPè„šæœ¬ä¸­è·å–{assign} çš„å˜é‡</a>
+</dt>
+<dt>7.15. <a href="language.function.block.tpl.htm#id428977" tppabs="http://www.smarty.net/docs/zh_CN/language.function.block.tpl#id428977">ç®€å•çš„ <code class="varname">{block}</code> ä¾‹å­</a>
+</dt>
+<dt>7.16. <a href="language.function.block.tpl.htm#id429021" tppabs="http://www.smarty.net/docs/zh_CN/language.function.block.tpl#id429021">å‰é¢é™„åŠ  <code class="varname">{block}</code> ä¾‹å­</a>
+</dt>
+<dt>7.17. <a href="language.function.block.tpl.htm#id429063" tppabs="http://www.smarty.net/docs/zh_CN/language.function.block.tpl#id429063">åé¢é™„åŠ  <code class="varname">{block}</code> ä¾‹å­</a>
+</dt>
+<dt>7.18. <a href="language.function.block.tpl.htm#id429105" tppabs="http://www.smarty.net/docs/zh_CN/language.function.block.tpl#id429105"><code class="varname">{$smarty.block.child}</code> ä¾‹å­</a>
+</dt>
+<dt>7.19. <a href="language.function.block.tpl.htm#id429146" tppabs="http://www.smarty.net/docs/zh_CN/language.function.block.tpl#id429146"><code class="varname">{$smarty.block.parent}</code> ä¾‹å­</a>
+</dt>
+<dt>7.20. <a href="language.function.call.tpl.htm#id430057" tppabs="http://www.smarty.net/docs/zh_CN/language.function.call.tpl#id430057">è°ƒç”¨ä¸€ä¸ªé€’å½’èœå•çš„ä¾‹å­</a>
+</dt>
+<dt>7.21. <a href="language.function.capture.tpl.htm#id430758" tppabs="http://www.smarty.net/docs/zh_CN/language.function.capture.tpl#id430758">{capture}ä½¿ç”¨nameå±æ€§</a>
+</dt>
+<dt>7.22. <a href="language.function.capture.tpl.htm#id430771" tppabs="http://www.smarty.net/docs/zh_CN/language.function.capture.tpl#id430771">{capture} æ•è·å†…å®¹åˆ°å˜é‡</a>
+</dt>
+<dt>7.23. <a href="language.function.capture.tpl.htm#id430791" tppabs="http://www.smarty.net/docs/zh_CN/language.function.capture.tpl#id430791">{capture} æ•è·å†…å®¹åˆ°æ•°ç»„å˜é‡</a>
+</dt>
+<dt>7.24. <a href="language.function.config.load.tpl.htm#id431500" tppabs="http://www.smarty.net/docs/zh_CN/language.function.config.load.tpl#id431500">{config_load}</a>
+</dt>
+<dt>7.25. <a href="language.function.config.load.tpl.htm#id431577" tppabs="http://www.smarty.net/docs/zh_CN/language.function.config.load.tpl#id431577"> {config_load} è½½å…¥æ®µè½é…ç½®å˜é‡</a>
+</dt>
+<dt>7.26. <a href="javascript:if(confirm('http://www.smarty.net/docs/zh_CN/language.function.extends.tpl  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ²»¿ÉÓÃ, »ò·ÅÆúÁËÏÂÔØ, »òÏîÄ¿¼´½«Í£Ö¹¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/docs/zh_CN/language.function.extends.tpl#id432338'" tppabs="http://www.smarty.net/docs/zh_CN/language.function.extends.tpl#id432338">ç®€å• {extends} ä¾‹å­</a>
+</dt>
+<dt>7.27. <a href="language.function.for.tpl.htm#id432843" tppabs="http://www.smarty.net/docs/zh_CN/language.function.for.tpl#id432843">ç®€å•çš„<code class="varname">{for}</code> å¾ªç¯</a>
+</dt>
+<dt>7.28. <a href="language.function.for.tpl.htm#id432873" tppabs="http://www.smarty.net/docs/zh_CN/language.function.for.tpl#id432873">ä½¿ç”¨<code class="varname">max</code> å±æ€§</a>
+</dt>
+<dt>7.29. <a href="language.function.for.tpl.htm#id432910" tppabs="http://www.smarty.net/docs/zh_CN/language.function.for.tpl#id432910"><code class="varname">{forelse}</code>çš„æ‰§è¡Œ</a>
+</dt>
+<dt>7.30. <a href="language.function.foreach.tpl.htm#id433686" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#id433686">ç®€å•çš„<code class="varname">{foreach}</code> å¾ªç¯</a>
+</dt>
+<dt>7.31. <a href="language.function.foreach.tpl.htm#id433733" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#id433733">ä½¿ç”¨<em class="parameter"><code>key</code></em>å˜é‡çš„ä¾‹å­</a>
+</dt>
+<dt>7.32. <a href="language.function.foreach.tpl.htm#id433782" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#id433782">å¤šç»´æ•°ç»„é€šè¿‡<em class="parameter"><code>item</code></em> å’Œ <em class="parameter"><code>key</code></em>æ¥åµŒå¥—ä½¿ç”¨{foreach}</a>
+</dt>
+<dt>7.33. <a href="language.function.foreach.tpl.htm#id433851" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#id433851">{foreachelse}çš„æ•°æ®åº“ä¾‹å­</a>
+</dt>
+<dt>7.34. <a href="language.function.foreach.tpl.htm#id433929" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#id433929"><em class="parameter"><code>index</code></em> ä¾‹å­</a>
+</dt>
+<dt>7.35. <a href="language.function.foreach.tpl.htm#id433992" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#id433992"><em class="parameter"><code>iteration</code></em> ä¾‹å­: is div by</a>
+</dt>
+<dt>7.36. <a href="language.function.foreach.tpl.htm#id434020" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#id434020"><em class="parameter"><code>iteration</code></em> ä¾‹å­: is even/odd by</a>
+</dt>
+<dt>7.37. <a href="language.function.foreach.tpl.htm#id434098" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#id434098"><em class="parameter"><code>first</code></em>ä¾‹å­</a>
+</dt>
+<dt>7.38. <a href="language.function.foreach.tpl.htm#id434146" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#id434146"><em class="parameter"><code>last</code></em>ä¾‹å­</a>
+</dt>
+<dt>7.39. <a href="language.function.foreach.tpl.htm#id434195" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#id434195"><em class="parameter"><code>show</code></em>ä¾‹å­</a>
+</dt>
+<dt>7.40. <a href="language.function.foreach.tpl.htm#id434241" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#id434241"><em class="parameter"><code>total</code></em>ä¾‹å­</a>
+</dt>
+<dt>7.41. <a href="language.function.foreach.tpl.htm#id434307" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#id434307"><code class="varname">{break}</code> ä¾‹å­</a>
+</dt>
+<dt>7.42. <a href="language.function.foreach.tpl.htm#id434342" tppabs="http://www.smarty.net/docs/zh_CN/language.function.foreach.tpl#id434342"><code class="varname">{continue}</code> ä¾‹å­</a>
+</dt>
+<dt>7.43. <a href="language.function.function.tpl.htm#id435563" tppabs="http://www.smarty.net/docs/zh_CN/language.function.function.tpl#id435563">é€’å½’èœå• {function} ä¾‹å­</a>
+</dt>
+<dt>7.44. <a href="language.function.if.tpl.htm#id436306" tppabs="http://www.smarty.net/docs/zh_CN/language.function.if.tpl#id436306">{if} è¡¨è¾¾å¼</a>
+</dt>
+<dt>7.45. <a href="language.function.if.tpl.htm#id436318" tppabs="http://www.smarty.net/docs/zh_CN/language.function.if.tpl#id436318">{if} çš„æ›´å¤šä¾‹å­</a>
+</dt>
+<dt>7.46. <a href="language.function.include.tpl.htm#id437288" tppabs="http://www.smarty.net/docs/zh_CN/language.function.include.tpl#id437288">ç®€å• {include} ä¾‹å­</a>
+</dt>
+<dt>7.47. <a href="language.function.include.tpl.htm#id437300" tppabs="http://www.smarty.net/docs/zh_CN/language.function.include.tpl#id437300">{include} ä¼ é€’å˜é‡</a>
+</dt>
+<dt>7.48. <a href="language.function.include.tpl.htm#id437338" tppabs="http://www.smarty.net/docs/zh_CN/language.function.include.tpl#id437338">{include} ä½œç”¨èŒƒå›´ç¤ºä¾‹</a>
+</dt>
+<dt>7.49. <a href="language.function.include.tpl.htm#id437373" tppabs="http://www.smarty.net/docs/zh_CN/language.function.include.tpl#id437373">{include} å…³é—­ç¼“å­˜</a>
+</dt>
+<dt>7.50. <a href="language.function.include.tpl.htm#id437390" tppabs="http://www.smarty.net/docs/zh_CN/language.function.include.tpl#id437390">{include} å•ç‹¬çš„ç¼“å­˜æ—¶é—´</a>
+</dt>
+<dt>7.51. <a href="language.function.include.tpl.htm#id437408" tppabs="http://www.smarty.net/docs/zh_CN/language.function.include.tpl#id437408">{include}å¼€å¯ç¼“å­˜</a>
+</dt>
+<dt>7.52. <a href="language.function.include.tpl.htm#id437425" tppabs="http://www.smarty.net/docs/zh_CN/language.function.include.tpl#id437425">{include} å’Œèµ‹å€¼å˜é‡</a>
+</dt>
+<dt>7.53. <a href="language.function.include.tpl.htm#id437455" tppabs="http://www.smarty.net/docs/zh_CN/language.function.include.tpl#id437455">{include} ç›¸å¯¹è·¯å¾„</a>
+</dt>
+<dt>7.54. <a href="language.function.include.tpl.htm#id437474" tppabs="http://www.smarty.net/docs/zh_CN/language.function.include.tpl#id437474">å„ç§ {include} èµ„æºä¾‹å­</a>
+</dt>
+<dt>7.55. <a href="language.function.include.php.tpl.htm#id438552" tppabs="http://www.smarty.net/docs/zh_CN/language.function.include.php.tpl#id438552"> {include_php} å‡½æ•°</a>
+</dt>
+<dt>7.56. <a href="language.function.insert.tpl.htm#id439311" tppabs="http://www.smarty.net/docs/zh_CN/language.function.insert.tpl#id439311"> {insert} å‡½æ•°</a>
+</dt>
+<dt>7.57. <a href="language.function.ldelim.tpl.htm#id439955" tppabs="http://www.smarty.net/docs/zh_CN/language.function.ldelim.tpl#id439955">{ldelim}, {rdelim}</a>
+</dt>
+<dt>7.58. <a href="language.function.ldelim.tpl.htm#id440001" tppabs="http://www.smarty.net/docs/zh_CN/language.function.ldelim.tpl#id440001">å†ä¸€ä¸ª Javascript ä¾‹å­</a>
+</dt>
+<dt>7.59. <a href="language.function.literal.tpl.htm#id439707" tppabs="http://www.smarty.net/docs/zh_CN/language.function.literal.tpl#id439707">{literal} æ ‡ç­¾</a>
+</dt>
+<dt>7.60. <a href="language.function.nocache.tpl.htm#id440062" tppabs="http://www.smarty.net/docs/zh_CN/language.function.nocache.tpl#id440062">é˜»æ­¢æ¨¡æ¿åŒºåŸŸç¼“å­˜</a>
+</dt>
+<dt>7.61. <a href="language.function.php.tpl.htm#id440208" tppabs="http://www.smarty.net/docs/zh_CN/language.function.php.tpl#id440208">{php}æ ‡ç­¾çš„ä½¿ç”¨</a>
+</dt>
+<dt>7.62. <a href="language.function.php.tpl.htm#id440608" tppabs="http://www.smarty.net/docs/zh_CN/language.function.php.tpl#id440608">{php}æ ‡ç­¾ä¸­ä½¿ç”¨å…¨å±€å˜é‡æ¥èµ‹å€¼å˜é‡</a>
+</dt>
+<dt>7.63. <a href="language.function.section.tpl.htm#id441406" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id441406">ç®€å•çš„{section}ä¾‹å­</a>
+</dt>
+<dt>7.64. <a href="language.function.section.tpl.htm#id441460" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id441460">{section}ä¸ä½¿ç”¨èµ‹å€¼æ•°ç»„</a>
+</dt>
+<dt>7.65. <a href="language.function.section.tpl.htm#id441486" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id441486">ç»™{section}è®¾ç½®åç§°</a>
+</dt>
+<dt>7.66. <a href="language.function.section.tpl.htm#id441522" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id441522">{section}ä¸­ä½¿ç”¨å…³è”æ•°ç»„</a>
+</dt>
+<dt>7.67. <a href="language.function.section.tpl.htm#id441585" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id441585">{section}çš„<code class="varname">loop</code>å±æ€§çš„æ¼”ç¤ºä¾‹å­</a>
+</dt>
+<dt>7.68. <a href="language.function.section.tpl.htm#id441668" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id441668">{section}åµŒå¥—</a>
+</dt>
+<dt>7.69. <a href="language.function.section.tpl.htm#id441736" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id441736">{sectionelse}çš„æ•°æ®åº“ä¾‹å­</a>
+</dt>
+<dt>7.70. <a href="language.function.section.tpl.htm#id441845" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id441845">{section} <code class="varname">index</code> å±æ€§</a>
+</dt>
+<dt>7.71. <a href="language.function.section.tpl.htm#id441942" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id441942"><code class="varname">index</code>, <code class="varname">index_next</code>
+ å’Œ <code class="varname">index_prev</code> å±æ€§ </a>
+</dt>
+<dt>7.72. <a href="language.function.section.tpl.htm#id442085" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id442085"><code class="varname">iteration</code>å±æ€§ </a>
+</dt>
+<dt>7.73. <a href="language.function.section.tpl.htm#id442252" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id442252">{section} å±æ€§ <code class="varname">first</code> å’Œ <code class="varname">last</code></a>
+</dt>
+<dt>7.74. <a href="language.function.section.tpl.htm#id442350" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id442350">{section} å±æ€§ <code class="varname">loop</code></a>
+</dt>
+<dt>7.75. <a href="language.function.section.tpl.htm#id442406" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id442406"><code class="varname">show</code> å±æ€§ </a>
+</dt>
+<dt>7.76. <a href="language.function.section.tpl.htm#id442470" tppabs="http://www.smarty.net/docs/zh_CN/language.function.section.tpl#id442470"><code class="varname">total</code>ä¾‹å­</a>
+</dt>
+<dt>7.77. <a href="language.function.setfilter.tpl.htm#id444269" tppabs="http://www.smarty.net/docs/zh_CN/language.function.setfilter.tpl#id444269">{setfilter} æ ‡ç­¾</a>
+</dt>
+<dt>7.78. <a href="language.function.strip.tpl.htm#id443977" tppabs="http://www.smarty.net/docs/zh_CN/language.function.strip.tpl#id443977">{strip} æ ‡ç­¾</a>
+</dt>
+<dt>7.79. <a href="language.function.while.tpl.htm#id444991" tppabs="http://www.smarty.net/docs/zh_CN/language.function.while.tpl#id444991">{while} å¾ªç¯</a>
+</dt>
+<dt>8.1. <a href="language.custom.functions.tpl.htm#id455474" tppabs="http://www.smarty.net/docs/zh_CN/language.custom.functions.tpl#id455474">{counter}</a>
+</dt>
+<dt>8.2. <a href="language.function.cycle.tpl.htm#id456105" tppabs="http://www.smarty.net/docs/zh_CN/language.function.cycle.tpl#id456105">{cycle}</a>
+</dt>
+<dt>8.3. <a href="language.function.eval.tpl.htm#id456693" tppabs="http://www.smarty.net/docs/zh_CN/language.function.eval.tpl#id456693">{eval}</a>
+</dt>
+<dt>8.4. <a href="language.function.eval.tpl.htm#id456742" tppabs="http://www.smarty.net/docs/zh_CN/language.function.eval.tpl#id456742">å¦ä¸€ä¸ª{eval}ä¾‹å­</a>
+</dt>
+<dt>8.5. <a href="language.function.fetch.tpl.htm#id457288" tppabs="http://www.smarty.net/docs/zh_CN/language.function.fetch.tpl#id457288">{fetch} ä¾‹å­</a>
+</dt>
+<dt>8.6. <a href="language.function.html.checkboxes.tpl.htm#id457985" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.checkboxes.tpl#id457985">{html_checkboxes}</a>
+</dt>
+<dt>8.7. <a href="language.function.html.checkboxes.tpl.htm#id458055" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.checkboxes.tpl#id458055">
+      æ•°æ®åº“ä¾‹å­(ä¾‹å¦‚ PEAR æˆ– ADODB):
+  </a>
+</dt>
+<dt>8.8. <a href="language.function.html.image.tpl.htm#id458980" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.image.tpl#id458980">{html_image} ä¾‹å­</a>
+</dt>
+<dt>8.9. <a href="language.function.html.options.tpl.htm#id459731" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.options.tpl#id459731">ä½¿ç”¨<code class="varname">options</code>å±æ€§</a>
+</dt>
+<dt>8.10. <a href="language.function.html.options.tpl.htm#id459790" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.options.tpl#id459790">åˆ†å¼€èµ‹å€¼<code class="varname">values</code> å’Œ <code class="varname">ouptut</code></a>
+</dt>
+<dt>8.11. <a href="language.function.html.options.tpl.htm#id459845" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.options.tpl#id459845">æ•°æ®åº“ä¾‹å­(å¦‚ ADODB æˆ– PEAR)</a>
+</dt>
+<dt>8.12. <a href="language.function.html.options.tpl.htm#id459889" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.options.tpl#id459889">&lt;optgroup&gt; ä¸‹æ‹‰ç»„</a>
+</dt>
+<dt>8.13. <a href="language.function.html.radios.tpl.htm#id460842" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.radios.tpl#id460842">{html_radios}ç¬¬ä¸€ä¸ªä¾‹å­</a>
+</dt>
+<dt>8.14. <a href="language.function.html.radios.tpl.htm#id460875" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.radios.tpl#id460875">{html_radios}ç¬¬äºŒä¸ªä¾‹å­</a>
+</dt>
+<dt>8.15. <a href="language.function.html.radios.tpl.htm#id460914" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.radios.tpl#id460914">{html_radios} æ•°æ®åº“ä¾‹å­(å¦‚ PEAR æˆ– ADODB):</a>
+</dt>
+<dt>8.16. <a href="language.function.html.select.date.tpl.htm#id462334" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.select.date.tpl#id462334">{html_select_date}</a>
+</dt>
+<dt>8.17. <a href="language.function.html.select.date.tpl.htm#id462359" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.select.date.tpl#id462359">{html_select_date} ç¬¬äºŒä¸ªåœ°ç†</a>
+</dt>
+<dt>8.18. <a href="language.function.html.select.time.tpl.htm#id464329" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.select.time.tpl#id464329">{html_select_time}</a>
+</dt>
+<dt>8.19. <a href="language.function.html.table.tpl.htm#id465903" tppabs="http://www.smarty.net/docs/zh_CN/language.function.html.table.tpl#id465903">{html_table}</a>
+</dt>
+<dt>8.20. <a href="language.function.mailto.tpl.htm#id466846" tppabs="http://www.smarty.net/docs/zh_CN/language.function.mailto.tpl#id466846">{mailto}ä¾‹å­å’Œå…¶è¾“å‡ºçš„ç»“æœ</a>
+</dt>
+<dt>8.21. <a href="language.function.math.tpl.htm#id467596" tppabs="http://www.smarty.net/docs/zh_CN/language.function.math.tpl#id467596">{math}</a>
+</dt>
+<dt>8.22. <a href="language.function.textformat.tpl.htm#id468412" tppabs="http://www.smarty.net/docs/zh_CN/language.function.textformat.tpl#id468412">{textformat}</a>
+</dt>
+<dt>9.1. <a href="config.files.tpl.htm#id475377" tppabs="http://www.smarty.net/docs/zh_CN/config.files.tpl#id475377">é…ç½®æ–‡ä»¶è¯­æ³•ç¤ºä¾‹</a>
+</dt>
+<dt>11.1. <a href="charset.tpl.htm#id476564" tppabs="http://www.smarty.net/docs/zh_CN/charset.tpl#id476564">è®¾ç½®å­—ç¬¦é›†ç¼–ç </a>
+</dt>
+<dt>12.1. <a href="smarty.constants.tpl.htm#id476385" tppabs="http://www.smarty.net/docs/zh_CN/smarty.constants.tpl#id476385">SMARTY_DIR</a>
+</dt>
+<dt>13.1. <a href="variable.compile.id.tpl.htm#id479632" tppabs="http://www.smarty.net/docs/zh_CN/variable.compile.id.tpl#id479632">è™šæ‹Ÿä¸»æœºç¯å¢ƒçš„$compile_id</a>
+</dt>
+<dt>13.2. <a href="variable.config.overwrite.tpl.htm#id479929" tppabs="http://www.smarty.net/docs/zh_CN/variable.config.overwrite.tpl#id479929">#å˜é‡#æ•°ç»„</a>
+</dt>
+<dt>13.3. <a href="variable.debugging.ctrl.tpl.htm#id480965" tppabs="http://www.smarty.net/docs/zh_CN/variable.debugging.ctrl.tpl#id480965">åœ¨localhostä¸Šçš„$debugging_ctrl</a>
+</dt>
+<dt>13.4. <a href="variable.default.config.handler.func.tpl.htm#id481327" tppabs="http://www.smarty.net/docs/zh_CN/variable.default.config.handler.func.tpl#id481327">$default_config_handler_func</a>
+</dt>
+<dt>13.5. <a href="variable.default.template.handler.func.tpl.htm#id481367" tppabs="http://www.smarty.net/docs/zh_CN/variable.default.template.handler.func.tpl#id481367">$default_template_handler_func</a>
+</dt>
+<dt>14.1. <a href="api.add.config.dir.tpl.htm#id488057" tppabs="http://www.smarty.net/docs/zh_CN/api.add.config.dir.tpl#id488057">addConfigDir()</a>
+</dt>
+<dt>14.2. <a href="api.add.plugins.dir.tpl.htm#id488287" tppabs="http://www.smarty.net/docs/zh_CN/api.add.plugins.dir.tpl#id488287">addPluginsDir()</a>
+</dt>
+<dt>14.3. <a href="api.add.template.dir.tpl.htm#id488512" tppabs="http://www.smarty.net/docs/zh_CN/api.add.template.dir.tpl#id488512">addTemplateDir()</a>
+</dt>
+<dt>14.4. <a href="api.append.tpl.htm#id488815" tppabs="http://www.smarty.net/docs/zh_CN/api.append.tpl#id488815">append()</a>
+</dt>
+<dt>14.5. <a href="api.append.by.ref.tpl.htm#id489206" tppabs="http://www.smarty.net/docs/zh_CN/api.append.by.ref.tpl#id489206">appendByRef()</a>
+</dt>
+<dt>14.6. <a href="api.assign.tpl.htm#id489577" tppabs="http://www.smarty.net/docs/zh_CN/api.assign.tpl#id489577">assign()</a>
+</dt>
+<dt>14.7. <a href="api.assign.by.ref.tpl.htm#id490007" tppabs="http://www.smarty.net/docs/zh_CN/api.assign.by.ref.tpl#id490007">assignByRef()</a>
+</dt>
+<dt>14.8. <a href="api.clear.all.assign.tpl.htm#id489850" tppabs="http://www.smarty.net/docs/zh_CN/api.clear.all.assign.tpl#id489850">clearAllAssign()</a>
+</dt>
+<dt>14.9. <a href="api.clear.all.cache.tpl.htm#id490501" tppabs="http://www.smarty.net/docs/zh_CN/api.clear.all.cache.tpl#id490501">clearAllCache</a>
+</dt>
+<dt>14.10. <a href="api.clear.assign.tpl.htm#id490707" tppabs="http://www.smarty.net/docs/zh_CN/api.clear.assign.tpl#id490707">clearAssign()</a>
+</dt>
+<dt>14.11. <a href="api.clear.cache.tpl.htm#id491039" tppabs="http://www.smarty.net/docs/zh_CN/api.clear.cache.tpl#id491039">clearCache()</a>
+</dt>
+<dt>14.12. <a href="api.clear.compiled.tpl.tpl.htm#id491382" tppabs="http://www.smarty.net/docs/zh_CN/api.clear.compiled.tpl.tpl#id491382">clearCompiledTemplate()</a>
+</dt>
+<dt>14.13. <a href="api.clear.config.tpl.htm#id491174" tppabs="http://www.smarty.net/docs/zh_CN/api.clear.config.tpl#id491174">clearConfig()</a>
+</dt>
+<dt>14.14. <a href="api.compile.all.config.tpl.htm#id491999" tppabs="http://www.smarty.net/docs/zh_CN/api.compile.all.config.tpl#id491999">compileAllConfig()</a>
+</dt>
+<dt>14.15. <a href="api.compile.all.templates.tpl.htm#id492404" tppabs="http://www.smarty.net/docs/zh_CN/api.compile.all.templates.tpl#id492404">compileAllTemplates()</a>
+</dt>
+<dt>14.16. <a href="api.config.load.tpl.htm#id492774" tppabs="http://www.smarty.net/docs/zh_CN/api.config.load.tpl#id492774">configLoad()</a>
+</dt>
+<dt>14.17. <a href="api.create.data.tpl.htm#id493114" tppabs="http://www.smarty.net/docs/zh_CN/api.create.data.tpl#id493114">createData()</a>
+</dt>
+<dt>14.18. <a href="api.create.template.tpl.htm#id493644" tppabs="http://www.smarty.net/docs/zh_CN/api.create.template.tpl#id493644">createTemplate()</a>
+</dt>
+<dt>14.19. <a href="api.display.tpl.htm#id494366" tppabs="http://www.smarty.net/docs/zh_CN/api.display.tpl#id494366">display()</a>
+</dt>
+<dt>14.20. <a href="api.display.tpl.htm#id494392" tppabs="http://www.smarty.net/docs/zh_CN/api.display.tpl#id494392">å…¶ä»– display() çš„ç¤ºä¾‹</a>
+</dt>
+<dt>14.21. <a href="api.fetch.tpl.htm#id495131" tppabs="http://www.smarty.net/docs/zh_CN/api.fetch.tpl#id495131">fetch()</a>
+</dt>
+<dt>14.22. <a href="api.fetch.tpl.htm#id495154" tppabs="http://www.smarty.net/docs/zh_CN/api.fetch.tpl#id495154">ç”¨fetch()æ¥å‘é‚®ä»¶</a>
+</dt>
+<dt>14.23. <a href="api.get.cache.dir.tpl.htm#id495018" tppabs="http://www.smarty.net/docs/zh_CN/api.get.cache.dir.tpl#id495018">getCacheDir()</a>
+</dt>
+<dt>14.24. <a href="api.get.compile.dir.tpl.htm#id495319" tppabs="http://www.smarty.net/docs/zh_CN/api.get.compile.dir.tpl#id495319">getCompileDir()</a>
+</dt>
+<dt>14.25. <a href="api.get.config.dir.tpl.htm#id495478" tppabs="http://www.smarty.net/docs/zh_CN/api.get.config.dir.tpl#id495478">getConfigDir()</a>
+</dt>
+<dt>14.26. <a href="api.get.config.vars.tpl.htm#id496097" tppabs="http://www.smarty.net/docs/zh_CN/api.get.config.vars.tpl#id496097">getConfigVars()</a>
+</dt>
+<dt>14.27. <a href="api.get.plugins.dir.tpl.htm#id496314" tppabs="http://www.smarty.net/docs/zh_CN/api.get.plugins.dir.tpl#id496314">getPluginsDir()</a>
+</dt>
+<dt>14.28. <a href="api.get.registered.object.tpl.htm#id496528" tppabs="http://www.smarty.net/docs/zh_CN/api.get.registered.object.tpl#id496528">getRegisteredObject()</a>
+</dt>
+<dt>14.29. <a href="api.get.tags.tpl.htm#id496774" tppabs="http://www.smarty.net/docs/zh_CN/api.get.tags.tpl#id496774">getTags()</a>
+</dt>
+<dt>14.30. <a href="api.get.template.dir.tpl.htm#id496954" tppabs="http://www.smarty.net/docs/zh_CN/api.get.template.dir.tpl#id496954">getTemplateDir()</a>
+</dt>
+<dt>14.31. <a href="api.get.template.vars.tpl.htm#id497175" tppabs="http://www.smarty.net/docs/zh_CN/api.get.template.vars.tpl#id497175">getTemplateVars</a>
+</dt>
+<dt>14.32. <a href="api.is.cached.tpl.htm#id497644" tppabs="http://www.smarty.net/docs/zh_CN/api.is.cached.tpl#id497644">isCached()</a>
+</dt>
+<dt>14.33. <a href="api.is.cached.tpl.htm#id497662" tppabs="http://www.smarty.net/docs/zh_CN/api.is.cached.tpl#id497662">isCached()ç”¨äºå¤šç¼“å­˜çš„æ¨¡æ¿</a>
+</dt>
+<dt>14.34. <a href="api.load.filter.tpl.htm#id498121" tppabs="http://www.smarty.net/docs/zh_CN/api.load.filter.tpl#id498121">è½½å…¥è¿‡æ»¤æ’ä»¶</a>
+</dt>
+<dt>14.35. <a href="api.register.cacheresource.tpl.htm#id498599" tppabs="http://www.smarty.net/docs/zh_CN/api.register.cacheresource.tpl#id498599">registerCacheResource()</a>
+</dt>
+<dt>14.36. <a href="api.register.class.tpl.htm#id498862" tppabs="http://www.smarty.net/docs/zh_CN/api.register.class.tpl#id498862">æ³¨å†Œç±»</a>
+</dt>
+<dt>14.37. <a href="api.register.class.tpl.htm#id498885" tppabs="http://www.smarty.net/docs/zh_CN/api.register.class.tpl#id498885">æ³¨å†Œå¸¦å‘½åç©ºé—´çš„ç±»</a>
+</dt>
+<dt>14.38. <a href="api.register.default.plugin.handler.tpl.htm#id499150" tppabs="http://www.smarty.net/docs/zh_CN/api.register.default.plugin.handler.tpl#id499150">é»˜è®¤æ’ä»¶å¤„ç†å™¨ä¾‹å­</a>
+</dt>
+<dt>14.39. <a href="api.register.plugin.tpl.htm#id500359" tppabs="http://www.smarty.net/docs/zh_CN/api.register.plugin.tpl#id500359">æ³¨å†Œå‡½æ•°</a>
+</dt>
+<dt>14.40. <a href="api.register.plugin.tpl.htm#id500389" tppabs="http://www.smarty.net/docs/zh_CN/api.register.plugin.tpl#id500389">æ³¨å†Œå—å‡½æ•°</a>
+</dt>
+<dt>14.41. <a href="api.register.plugin.tpl.htm#id500418" tppabs="http://www.smarty.net/docs/zh_CN/api.register.plugin.tpl#id500418">æ³¨å†Œä¿®é¥°å™¨</a>
+</dt>
+<dt>14.42. <a href="api.register.resource.tpl.htm#id501294" tppabs="http://www.smarty.net/docs/zh_CN/api.register.resource.tpl#id501294">registerResource()</a>
+</dt>
+<dt>14.43. <a href="api.set.cache.dir.tpl.htm#id501118" tppabs="http://www.smarty.net/docs/zh_CN/api.set.cache.dir.tpl#id501118">setCacheDir()</a>
+</dt>
+<dt>14.44. <a href="api.set.compile.dir.tpl.htm#id501368" tppabs="http://www.smarty.net/docs/zh_CN/api.set.compile.dir.tpl#id501368">setCompileDir()</a>
+</dt>
+<dt>14.45. <a href="api.set.config.dir.tpl.htm#id501486" tppabs="http://www.smarty.net/docs/zh_CN/api.set.config.dir.tpl#id501486">setConfigDir()</a>
+</dt>
+<dt>14.46. <a href="api.set.plugins.dir.tpl.htm#id502140" tppabs="http://www.smarty.net/docs/zh_CN/api.set.plugins.dir.tpl#id502140">setPluginsDir()</a>
+</dt>
+<dt>14.47. <a href="api.set.template.dir.tpl.htm#id502353" tppabs="http://www.smarty.net/docs/zh_CN/api.set.template.dir.tpl#id502353">setTemplateDir()</a>
+</dt>
+<dt>14.48. <a href="api.template.exists.tpl.htm#id502571" tppabs="http://www.smarty.net/docs/zh_CN/api.template.exists.tpl#id502571">templateExists()</a>
+</dt>
+<dt>14.49. <a href="api.unregister.cacheresource.tpl.htm#id502880" tppabs="http://www.smarty.net/docs/zh_CN/api.unregister.cacheresource.tpl#id502880">unregisterCacheResource()</a>
+</dt>
+<dt>14.50. <a href="api.unregister.plugin.tpl.htm#id503488" tppabs="http://www.smarty.net/docs/zh_CN/api.unregister.plugin.tpl#id503488">æ³¨é”€å‡½æ•°</a>
+</dt>
+<dt>14.51. <a href="api.unregister.resource.tpl.htm#id503543" tppabs="http://www.smarty.net/docs/zh_CN/api.unregister.resource.tpl#id503543">unregisterResource()</a>
+</dt>
+<dt>14.52. <a href="api.test.install.tpl.htm#id503668" tppabs="http://www.smarty.net/docs/zh_CN/api.test.install.tpl#id503668">testInstall()</a>
+</dt>
+<dt>15.1. <a href="caching.tpl.htm#id512281" tppabs="http://www.smarty.net/docs/zh_CN/caching.tpl#id512281">å¼€å¯ç¼“å­˜</a>
+</dt>
+<dt>15.2. <a href="caching.tpl.htm#id512396" tppabs="http://www.smarty.net/docs/zh_CN/caching.tpl#id512396">ä¸ºæ¯ä¸ªç¼“å­˜è®¾ç½®$cache_lifetime</a>
+</dt>
+<dt>15.3. <a href="caching.tpl.htm#id512451" tppabs="http://www.smarty.net/docs/zh_CN/caching.tpl#id512451">å…³é—­ $compile_check</a>
+</dt>
+<dt>15.4. <a href="caching.tpl.htm#id512529" tppabs="http://www.smarty.net/docs/zh_CN/caching.tpl#id512529">ä½¿ç”¨ isCached()</a>
+</dt>
+<dt>15.5. <a href="caching.tpl.htm#id512626" tppabs="http://www.smarty.net/docs/zh_CN/caching.tpl#id512626">åˆ é™¤ç¼“å­˜</a>
+</dt>
+<dt>15.6. <a href="caching.multiple.caches.tpl.htm#id513080" tppabs="http://www.smarty.net/docs/zh_CN/caching.multiple.caches.tpl#id513080">display()çš„å‚æ•°ä½œä¸º$cache_id</a>
+</dt>
+<dt>15.7. <a href="caching.multiple.caches.tpl.htm#id513200" tppabs="http://www.smarty.net/docs/zh_CN/caching.multiple.caches.tpl#id513200">ç»™ isCached() ä¼ é€’ä¸€ä¸ª cache_id </a>
+</dt>
+<dt>15.8. <a href="caching.multiple.caches.tpl.htm#id513239" tppabs="http://www.smarty.net/docs/zh_CN/caching.multiple.caches.tpl#id513239">åˆ é™¤ç‰¹å®š$cache_idçš„ç¼“å­˜</a>
+</dt>
+<dt>15.9. <a href="caching.groups.tpl.htm#id513683" tppabs="http://www.smarty.net/docs/zh_CN/caching.groups.tpl#id513683">$cache_id ç»„</a>
+</dt>
+<dt>15.10. <a href="caching.cacheable.tpl.htm#id513538" tppabs="http://www.smarty.net/docs/zh_CN/caching.cacheable.tpl#id513538">ä½¿æ¨¡æ¿çš„ä¸€å—åŒºåŸŸä¸è¿›è¡Œç¼“å­˜</a>
+</dt>
+<dt>15.11. <a href="caching.cacheable.tpl.htm#id514010" tppabs="http://www.smarty.net/docs/zh_CN/caching.cacheable.tpl#id514010">è®©æ ‡ç­¾å†…å®¹ä¸è¿›è¡Œç¼“å­˜</a>
+</dt>
+<dt>15.12. <a href="caching.cacheable.tpl.htm#id514070" tppabs="http://www.smarty.net/docs/zh_CN/caching.cacheable.tpl#id514070">æ§åˆ¶å˜é‡ä¸ç¼“å­˜</a>
+</dt>
+<dt>15.13. <a href="caching.cacheable.tpl.htm#id514176" tppabs="http://www.smarty.net/docs/zh_CN/caching.cacheable.tpl#id514176">æ§åˆ¶æ’ä»¶çš„ç¼“å­˜</a>
+</dt>
+<dt>15.14. <a href="caching.cacheable.tpl.htm#id514226" tppabs="http://www.smarty.net/docs/zh_CN/caching.cacheable.tpl#id514226">ä½¿æ¨¡æ¿å†…ä¸€éƒ¨åˆ†åŒºåŸŸä¸ç¼“å­˜</a>
+</dt>
+<dt>15.15. <a href="caching.custom.tpl.htm#id514837" tppabs="http://www.smarty.net/docs/zh_CN/caching.custom.tpl#id514837">é€šè¿‡MySQLå®ç°è‡ªå®šä¹‰ç¼“å­˜æœºåˆ¶</a>
+</dt>
+<dt>15.16. <a href="caching.custom.tpl.htm#id514851" tppabs="http://www.smarty.net/docs/zh_CN/caching.custom.tpl#id514851">é€šè¿‡Memcacheå®ç°è‡ªå®šä¹‰ç¼“å­˜æœºåˆ¶</a>
+</dt>
+<dt>16.1. <a href="resources.tpl.htm#id516850" tppabs="http://www.smarty.net/docs/zh_CN/resources.tpl#id516850">ä½¿ç”¨$template_dir</a>
+</dt>
+<dt>16.2. <a href="resources.tpl.htm#id516912" tppabs="http://www.smarty.net/docs/zh_CN/resources.tpl#id516912">ç‰¹å®šçš„$template_dir</a>
+</dt>
+<dt>16.3. <a href="resources.tpl.htm#id517020" tppabs="http://www.smarty.net/docs/zh_CN/resources.tpl#id517020">ä»»æ„ç›®å½•çš„æ¨¡æ¿</a>
+</dt>
+<dt>16.4. <a href="resources.tpl.htm#id517069" tppabs="http://www.smarty.net/docs/zh_CN/resources.tpl#id517069">ä½¿ç”¨windowsçš„æ–‡ä»¶è·¯å¾„</a>
+</dt>
+<dt>16.5. <a href="resources.string.tpl.htm#id517538" tppabs="http://www.smarty.net/docs/zh_CN/resources.string.tpl#id517538">ä½¿ç”¨å­—ç¬¦ä¸²èµ„æº</a>
+</dt>
+<dt>16.6. <a href="resources.string.tpl.htm#id517608" tppabs="http://www.smarty.net/docs/zh_CN/resources.string.tpl#id517608">ä½¿ç”¨ç¼–ç åçš„å­—ç¬¦ä¸²èµ„æº</a>
+</dt>
+<dt>16.7. <a href="resources.streams.tpl.htm#id517309" tppabs="http://www.smarty.net/docs/zh_CN/resources.streams.tpl#id517309">PHPæ•°æ®æµ</a>
+</dt>
+<dt>16.8. <a href="resources.streams.tpl.htm#id517357" tppabs="http://www.smarty.net/docs/zh_CN/resources.streams.tpl#id517357">æ¨¡æ¿ä¸­ä½¿ç”¨</a>
+</dt>
+<dt>16.9. <a href="resources.extends.tpl.htm#id518073" tppabs="http://www.smarty.net/docs/zh_CN/resources.extends.tpl#id518073">ä½¿ç”¨æ¨¡æ¿ç»§æ‰¿</a>
+</dt>
+<dt>16.10. <a href="resources.custom.tpl.htm#id517841" tppabs="http://www.smarty.net/docs/zh_CN/resources.custom.tpl#id517841">Uä½¿ç”¨è‡ªå®šä¹‰èµ„æº</a>
+</dt>
+<dt>17.1. <a href="advanced.features.tpl.htm#id519802" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.tpl#id519802">æ‰©å±•Smarty_Security ç±»æ¥è®¾ç½®å®‰å…¨ç­–ç•¥</a>
+</dt>
+<dt>17.2. <a href="advanced.features.tpl.htm#id519817" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.tpl#id519817">é€šè¿‡Smarty_Securityç±»çš„å®ä¾‹æ¥è‡ªå®šä¹‰å®‰å…¨ç­–ç•¥</a>
+</dt>
+<dt>17.3. <a href="advanced.features.tpl.htm#id519838" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.tpl#id519838">å¼€å¯é»˜è®¤çš„å®‰å…¨è®¾ç½®</a>
+</dt>
+<dt>17.4. <a href="advanced.features.template.settings.tpl.htm#id520420" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.template.settings.tpl#id520420">åˆ›å»ºæ¨¡æ¿å¯¹è±¡å¹¶ä¿®æ”¹Smartyçš„è®¾ç½®</a>
+</dt>
+<dt>17.5. <a href="advanced.features.template.settings.tpl.htm#id520441" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.template.settings.tpl#id520441">åˆ›å»ºæ¨¡æ¿å¯¹è±¡å¹¶æ³¨å†Œæ’ä»¶</a>
+</dt>
+<dt>17.6. <a href="advanced.features.template.inheritance.tpl.htm#id520754" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.template.inheritance.tpl#id520754">æ¨¡æ¿ç»§æ‰¿ä¾‹å­</a>
+</dt>
+<dt>17.7. <a href="advanced.features.template.inheritance.tpl.htm#id520820" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.template.inheritance.tpl#id520820">ç”¨<code class="literal">extends:</code>æ¥è¿›è¡Œæ¨¡æ¿ç»§æ‰¿</a>
+</dt>
+<dt>17.8. <a href="advanced.features.streams.tpl.htm#id520959" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.streams.tpl#id520959">æ•°æ®æµå˜é‡</a>
+</dt>
+<dt>17.9. <a href="advanced.features.objects.tpl.htm#id521540" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.objects.tpl#id521540">æ³¨å†Œæˆ–èµ‹å€¼ä¸€ä¸ªå¯¹è±¡</a>
+</dt>
+<dt>17.10. <a href="advanced.features.static.classes.tpl.htm#id521375" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.static.classes.tpl#id521375">é™æ€ç±»å­˜å–è¯­æ³•</a>
+</dt>
+<dt>17.11. <a href="advanced.features.prefilters.tpl.htm#id521999" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.prefilters.tpl#id521999">ä½¿ç”¨å‰ç½®è¿‡æ»¤å™¨</a>
+</dt>
+<dt>17.12. <a href="advanced.features.postfilters.tpl.htm#id522223" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.postfilters.tpl#id522223">ä½¿ç”¨åç½®è¿‡æ»¤å™¨</a>
+</dt>
+<dt>17.13. <a href="advanced.features.outputfilters.tpl.htm#id522505" tppabs="http://www.smarty.net/docs/zh_CN/advanced.features.outputfilters.tpl#id522505">ä½¿ç”¨è¾“å‡ºè¿‡æ»¤å™¨</a>
+</dt>
+<dt>18.1. <a href="plugins.functions.tpl.htm#id525249" tppabs="http://www.smarty.net/docs/zh_CN/plugins.functions.tpl#id525249">å¸¦è¾“å‡ºçš„å‡½æ•°æ’ä»¶</a>
+</dt>
+<dt>18.2. <a href="plugins.functions.tpl.htm#id525287" tppabs="http://www.smarty.net/docs/zh_CN/plugins.functions.tpl#id525287">ä¸å¸¦è¾“å‡ºçš„å‡½æ•°æ’ä»¶</a>
+</dt>
+<dt>18.3. <a href="plugins.modifiers.tpl.htm#id525599" tppabs="http://www.smarty.net/docs/zh_CN/plugins.modifiers.tpl#id525599">ä¸€ä¸ªç®€å•çš„ä¿®é¥°å™¨</a>
+</dt>
+<dt>18.4. <a href="plugins.modifiers.tpl.htm#id525627" tppabs="http://www.smarty.net/docs/zh_CN/plugins.modifiers.tpl#id525627">æ›´å¤æ‚çš„ä¿®é¥°å™¨</a>
+</dt>
+<dt>18.5. <a href="plugins.block.functions.tpl.htm#id526030" tppabs="http://www.smarty.net/docs/zh_CN/plugins.block.functions.tpl#id526030">å—å‡½æ•°</a>
+</dt>
+<dt>18.6. <a href="plugins.compiler.functions.tpl.htm#id526390" tppabs="http://www.smarty.net/docs/zh_CN/plugins.compiler.functions.tpl#id526390">ä¸€ä¸ªç®€å•çš„ç¼–è¯‘å‡½æ•°</a>
+</dt>
+<dt>18.7. <a href="plugins.prefilters.postfilters.tpl.htm#id526692" tppabs="http://www.smarty.net/docs/zh_CN/plugins.prefilters.postfilters.tpl#id526692">å‰ç½®è¿‡æ»¤å™¨</a>
+</dt>
+<dt>18.8. <a href="plugins.prefilters.postfilters.tpl.htm#id526708" tppabs="http://www.smarty.net/docs/zh_CN/plugins.prefilters.postfilters.tpl#id526708">åç½®è¿‡æ»¤å™¨</a>
+</dt>
+<dt>18.9. <a href="plugins.outputfilters.tpl.htm#id526991" tppabs="http://www.smarty.net/docs/zh_CN/plugins.outputfilters.tpl#id526991">è¾“å‡ºè¿‡æ»¤å™¨</a>
+</dt>
+<dt>18.10. <a href="plugins.resources.tpl.htm#id527253" tppabs="http://www.smarty.net/docs/zh_CN/plugins.resources.tpl#id527253">èµ„æºæ’ä»¶</a>
+</dt>
+<dt>18.11. <a href="plugins.inserts.tpl.htm#id527594" tppabs="http://www.smarty.net/docs/zh_CN/plugins.inserts.tpl#id527594">æ’å…¥æ’ä»¶</a>
+</dt>
+<dt>19.1. <a href="bc.tpl.htm#id528790" tppabs="http://www.smarty.net/docs/zh_CN/bc.tpl#id528790">ä½¿ç”¨SmartyBC</a>
+</dt>
+<dt>20.1. <a href="troubleshooting.tpl.htm#id528840" tppabs="http://www.smarty.net/docs/zh_CN/troubleshooting.tpl#id528840">Smarty é”™è¯¯</a>
+</dt>
+<dt>20.2. <a href="troubleshooting.tpl.htm#id529004" tppabs="http://www.smarty.net/docs/zh_CN/troubleshooting.tpl#id529004">PHP é”™è¯¯æç¤º</a>
+</dt>
+<dt>20.3. <a href="troubleshooting.tpl.htm#id529295" tppabs="http://www.smarty.net/docs/zh_CN/troubleshooting.tpl#id529295">å…¶ä»–çš„å¸¸è§é”™è¯¯</a>
+</dt>
+<dt>21.1. <a href="tips.tpl.htm#id530100" tppabs="http://www.smarty.net/docs/zh_CN/tips.tpl#id530100">å½“å˜é‡ä¸ºç©ºæ—¶æ˜¾ç¤º &amp;nbsp; </a>
+</dt>
+<dt>21.2. <a href="tips.default.var.handling.tpl.htm#id530167" tppabs="http://www.smarty.net/docs/zh_CN/tips.default.var.handling.tpl#id530167">ç»™å˜é‡èµ‹é»˜è®¤å€¼</a>
+</dt>
+<dt>21.3. <a href="tips.passing.vars.tpl.htm#id530234" tppabs="http://www.smarty.net/docs/zh_CN/tips.passing.vars.tpl#id530234">ä¼ é€’æ ‡é¢˜åˆ°å¤´éƒ¨æ¨¡æ¿</a>
+</dt>
+<dt>21.4. <a href="tips.dates.tpl.htm#id530377" tppabs="http://www.smarty.net/docs/zh_CN/tips.dates.tpl#id530377">ä½¿ç”¨ date_format</a>
+</dt>
+<dt>21.5. <a href="tips.dates.tpl.htm#id530441" tppabs="http://www.smarty.net/docs/zh_CN/tips.dates.tpl#id530441">è½¬æ¢å…ƒä»¶çš„æ—¥æœŸä¸ºæ—¶é—´æˆ³</a>
+</dt>
+<dt>21.6. <a href="tips.wap.tpl.htm#id530548" tppabs="http://www.smarty.net/docs/zh_CN/tips.wap.tpl#id530548">ä½¿ç”¨ {insert} æ¥æ’å…¥ä¸€ä¸ªWMLç±»å‹çš„æ–‡ä»¶å¤´</a>
+</dt>
+<dt>21.7. <a href="tips.componentized.templates.tpl.htm#id530702" tppabs="http://www.smarty.net/docs/zh_CN/tips.componentized.templates.tpl#id530702">ç»„ä»¶åŒ–æ¨¡æ¿</a>
+</dt>
+<dt>21.8. <a href="tips.obfuscating.email.tpl.htm#id530816" tppabs="http://www.smarty.net/docs/zh_CN/tips.obfuscating.email.tpl#id530816">æ··æ·†ç”µé‚®åœ°å€çš„ä¾‹å­</a>
+</dt>
+</dl>
+</div>
+</div>
+<div class="navfooter">
+<hr>
+<table width="100%" summary="Navigation footer">
+<tr>
+<td width="40%" align="left">Â </td>
+<td width="20%" align="center">Â </td>
+<td width="40%" align="right">Â <a accesskey="n" href="preface.tpl.htm" tppabs="http://www.smarty.net/docs/zh_CN/preface.tpl">Next</a>
+</td>
+</tr>
+<tr>
+<td width="40%" align="left" valign="top">Â </td>
+<td width="20%" align="center">Â </td>
+<td width="40%" align="right" valign="top">Â åºè¨€</td>
+</tr>
+</table>
+</div>
+
+		
+		  <div class="comments">
+      
+                  <div id="commentHeader"><strong>Comments</strong></div>
+          <div class="commentInfo">
+          
+                                <div class="commentWrapperEven">
+              <div class="commentBody"><emphasis>No comments for this page.</emphasis></div>
+            </div>          
+                    </div>
+          <div id="commentFormWrapper">
+            <div id="commentFormHeader"><strong>Post a Comment</strong></div>
+            <div id="commentFormElements">
+            <form id="commentForm" method="post" action="http://www.smarty.net/comments/post">
+              <div id="commentText" style="font-style: italic; color:#f00">All comments are moderated. Support questions are ignored, use the <a href="javascript:if(confirm('http://www.smarty.net/forums/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/forums/'" tppabs="http://www.smarty.net/forums/">forums</a> instead.</div>
+              <div id="commentFormAuthor">Author: <input id="commentFormAuthorText" type="text" name="author" size="40" value="anonymous" style="color: grey" onFocus="clearDefaultandCSS(this)"></div>
+              <div id="commentFormEmail">Email: <input id="commentFormEmailText" type="text" name="email" size="30" value="your@email.com" style="color: grey" onFocus="clearDefaultandCSS(this)"> <span style="font-style: italic">(not shown)</span></div>
+              
+              <div id="commentFormChallenge">What is 0 plus 7? <input id="commentFormChallengeText" type="text" name="challenge" size="30" value="" style="color: grey"> <span style="font-style: italic">(Are you human?)</span></div>
+              <input id="commentFormChallengeObf" type="hidden" name="obf" value="8be8ef82e4b19183013618bb38cca579">
+              <div id="commentFormBody"><textarea id="commentFormBodyText" name="body" rows="8" cols="60"></textarea></div>
+              <div id="commentFormSubmitButtons">
+                <input id="commentFormPostButton" type="submit" value="Post Comment">
+                <input id="commentFormPreviewButton" type="submit" value="Preview">
+                <img id="commentBusyIcon" src="busy.gif" tppabs="http://www.smarty.net/images/busy.gif">
+              </div>
+              <input id="commentFormPageID" type="hidden" name="page_id" value="docs/zh_CN/index.tpl">
+            </form>
+            </div>
+          </div>
+          <div id="commentPreviewText">
+          </div>
+          <div id="commentPostedText">
+          </div>
+              
+      </div>
+      
+      </div><!-- end colMain -->
+      
+      <div class="col colAdditional" align="left">
+        <div  class="box box1" id="skyscraper">
+          <h1 class="boxHead">Advertisement</h1>
+    		<script type="text/javascript"> 
+    		  GA_googleFillSlot("smarty_right_skyscraper");
+    		</script>
+    		</div>
+  		  <div class="box box1" id="smartySponsors">
+          <h1 class="boxHead">Sponsors <a href="javascript:if(confirm('http://www.smarty.net/sponsors  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/sponsors'" tppabs="http://www.smarty.net/sponsors">[info]</a></h1>
+          <div class="boxContent">
+						  <a href="javascript:if(confirm('http://www.webhost.uk.net/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.webhost.uk.net/'" tppabs="http://www.webhost.uk.net/">UK Web Hosting</a> <span style="font-size: .7em">@webhost.uk.net</span><br>
+						  <a href="javascript:if(confirm('http://www.rshosting.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.rshosting.com/'" tppabs="http://www.rshosting.com/">Best Web Hosting</a> <span style="font-size: .7em">@rshosting.com</span><br>
+						  <a href="javascript:if(confirm('http://www.webhostinguk.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.webhostinguk.com/'" tppabs="http://www.webhostinguk.com/">Web Hosting UK</a> <span style="font-size: .7em">@webhostinguk.com</span><br>
+						  <a href="javascript:if(confirm('http://www.infrenion.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.infrenion.com/'" tppabs="http://www.infrenion.com/">Unlimited Web Hosting</a> <span style="font-size: .7em">@infrenion.com</span><br>
+						  <a href="javascript:if(confirm('http://www.morphodo.com/de/app-entwicklung.html  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.morphodo.com/de/app-entwicklung.html'" tppabs="http://www.morphodo.com/de/app-entwicklung.html">App Entwicklung</a> <span style="font-size: .7em">@morphodo.com</span><br>
+						  <a href="javascript:if(confirm('https://www.paymentprocessingsolutions.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://www.paymentprocessingsolutions.com/'" tppabs="https://www.paymentprocessingsolutions.com/">Credit Card Processing Company</a> <br>
+						  <a href="javascript:if(confirm('http://www.accessmaids.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.accessmaids.com/'" tppabs="http://www.accessmaids.com/">Cleaning Services Chicago</a> <br>
+						  <a href="javascript:if(confirm('http://www.qsfps.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.qsfps.com/'" tppabs="http://www.qsfps.com/">QSFP</a> <br>
+						  <a href="javascript:if(confirm('https://www.sbobet-thb.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://www.sbobet-thb.com/'" tppabs="https://www.sbobet-thb.com/">Sbobet</a> <br>
+						  <a href="javascript:if(confirm('https://www.sbobet-thb.com/sbobet-ibcbet.html  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://www.sbobet-thb.com/sbobet-ibcbet.html'" tppabs="https://www.sbobet-thb.com/sbobet-ibcbet.html">IBCBET</a> <br>
+						  <a href="javascript:if(confirm('http://www.bestpysanky.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.bestpysanky.com/'" tppabs="http://www.bestpysanky.com/">Christmas Ornaments</a> <br>
+						
+			
+          </div>
+        </div>
+  		  <div class="box box1" id="smartyAds">
+  		    <h1 class="boxHead">Using Smarty</h1>
+          <div class="boxContent">
+			      <a href="javascript:if(confirm('http://www.dissertationteam.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.dissertationteam.com/'" tppabs="http://www.dissertationteam.com/">dissertationteam.com</a><br>
+			      <a href="javascript:if(confirm('http://jackpot4me.com/super-lig/galatasaray_istanbul.html  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://jackpot4me.com/super-lig/galatasaray_istanbul.html'" tppabs="http://jackpot4me.com/super-lig/galatasaray_istanbul.html">galatasaray</a><br>
+			      <a href="javascript:if(confirm('http://www.dresses1000.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.dresses1000.com/'" tppabs="http://www.dresses1000.com/">Quinceanera Dresses</a><br>
+			      <a href="javascript:if(confirm('http://www.magicquinceanera.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.magicquinceanera.com/'" tppabs="http://www.magicquinceanera.com/">quinceanera gowns</a><br>
+			      <a href="javascript:if(confirm('http://skincareinsight.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://skincareinsight.com/'" tppabs="http://skincareinsight.com/">skin care</a><br>
+      			
+      			
+          </div>
+  		    <h1 class="boxHead">I.T Certifications</h1>
+          <div class="boxContent">
+			      <a href="javascript:if(confirm('http://www.pass-guaranteed.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.pass-guaranteed.com/'" tppabs="http://www.pass-guaranteed.com/">I.T Certification Exams</a><br>
+			      <a href="javascript:if(confirm('http://www.firsttrycertify.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.firsttrycertify.com/'" tppabs="http://www.firsttrycertify.com/">Certification Practice Tests</a><br>
+			      <a href="javascript:if(confirm('https://www.passeasily.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='https://www.passeasily.com/'" tppabs="https://www.passeasily.com/">Real Exam Test Questions</a><br>
+          </div>
+        </div>
+      </div><!-- end colAdditional -->    
+      <div class="clear"></div>
+    </div><!-- end wrapper -->
+
+  <div id="footer">
+    <div id="colTopFooter">
+      <a href="javascript:if(confirm('http://www.smarty.net/credits  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/credits'" tppabs="http://www.smarty.net/credits" class="rightMar">credits</a>
+      <a href="javascript:if(confirm('http://www.smarty.net/copyright  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/copyright'" tppabs="http://www.smarty.net/copyright" accesskey="8" class="rightMar">copyright</a>
+      <a href="javascript:if(confirm('http://www.smarty.net/accessibility  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.smarty.net/accessibility'" tppabs="http://www.smarty.net/accessibility" accesskey="0">accessibility</a>
+    </div>
+    <p>Smarty Copyright &copy; 2002 &ndash; 2015 New Digital Group, Inc. All rights reserved.</p>
+    <p>This page generated in 0.03038 secs with <a href="javascript:if(confirm('http://www.tinymvc.com/  \n\n¸ÃÎÄ¼şÎŞ·¨ÓÃ Teleport Ultra ÏÂÔØ, ÒòÎª ËüÊÇÒ»¸öÓò»òÂ·¾¶Íâ²¿±»ÉèÖÃÎªËüµÄÆôÊ¼µØÖ·µÄµØÖ·¡£  \n\nÄãÏëÔÚ·şÎñÆ÷ÉÏ´ò¿ªËü?'))window.location='http://www.tinymvc.com/'" tppabs="http://www.tinymvc.com/">TinyMVC</a> and Smarty 3.</p>
+  </div>    
+<script src="urchin.js" tppabs="http://www.google-analytics.com/urchin.js" type="text/javascript"> 
+</script> 
+<script type="text/javascript"> 
+_uacct = "UA-638513-4";
+urchinTracker();
+</script>
+<script type="text/javascript">
+    var GoSquared={};
+    GoSquared.acct = "GSN-138769-Y";
+    (function(w){
+        function gs(){
+            w._gstc_lt=+(new Date); var d=document;
+            var g = d.createElement("script"); g.type = "text/javascript"; g.async = true; g.src = "tracker.js"/*tpa=http://d1l6p2sc9645hc.cloudfront.net/tracker.js*/;
+            var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(g, s);
+        }
+        w.addEventListener?w.addEventListener("load",gs,false):w.attachEvent("onload",gs);
+    })(window);
+</script>
+
+
+</body>
+</html>

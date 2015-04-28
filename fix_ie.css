@@ -1,0 +1,36 @@
+/*
+screen/fix_ie.css
+*/
+
+
+/* ________________________ General hasLayout fix ________________________ */
+
+.bookNav,
+#logo,
+#nav {
+  zoom: 1;
+}
+
+
+/* ____________________________ 32 Bit PNG Fix ___________________________ */
+
+#logo {
+  background-image: none;
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../../images/logo.png',sizingMethod='image');
+}
+
+
+/* _______________________ General Positioning Fix _______________________ */
+
+.code,
+#logo a {
+  position: relative;
+}
+
+
+/* _____________________________ General Fixes ___________________________ */
+
+.navHorz li a {
+  width: 1px;
+  zoom: 1;
+}
